@@ -1,5 +1,5 @@
 server:
-  port: 8086
+  port: 8087
 
 # Inbound auth is disabled via the "no-security" profile (pulled in by "local").
 # SecurityProperties.clientId is still validated as @NotBlank because the logging

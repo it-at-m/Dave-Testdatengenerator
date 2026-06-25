@@ -58,20 +58,20 @@ damit das Frontend das Backend lokal ohne Keycloak ansprechen kann. **Nicht in P
 ## Starten (lokal)
 
 1. **dave-backend** lokal starten (z. B. `runLocalNoSecurity`), passende `base-url` setzen.
-2. **Backend** (Port 8086):
+2. **Backend** (Port 8087):
    ```
    cd backend
    mvn spring-boot:run -Dspring-boot.run.profiles=local
    ```
    (Während der Entwicklung können die strengen Lints übersprungen werden:
    `-Dspotless.check.skip=true -Dpmd.skip=true -Dcpd.skip=true -Dspotbugs.skip=true`.)
-3. **Frontend** (Port 8081, Vite-Proxy `/api/backend` → `http://localhost:8086`):
+3. **Frontend** (Port 8088, Vite-Proxy `/api/backend` → `http://localhost:8087`):
    ```
    cd frontend
    npm install
    npm run dev
    ```
-   Aufruf: <http://localhost:8081>
+   Aufruf: <http://localhost:8088>
 
 Hinweis: `npm run dev` benötigt **keinen** generierten OpenAPI-Client – das Frontend nutzt einen
 handgeschriebenen fetch-Client (`src/api/testdaten-client.ts`). Für einen Produktions-Build

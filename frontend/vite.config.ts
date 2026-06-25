@@ -59,16 +59,16 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       host: true,
-      port: 8081,
+      port: 8088,
       proxy: {
         // Frontend calls go to "/api/backend/..."; strip that prefix and forward to the
-        // dave-testdata-generator backend (default local port 8086).
+        // dave-testdata-generator backend (default local port 8087).
         "/api/backend": {
-          target: "http://localhost:8086",
+          target: "http://localhost:8087",
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api\/backend/, ""),
         },
-        "/actuator": "http://localhost:8086",
+        "/actuator": "http://localhost:8087",
       },
       allowedHosts: ["host.docker.internal"], // required to use frontend behind proxy (e.g. API Gateway)
       headers: {

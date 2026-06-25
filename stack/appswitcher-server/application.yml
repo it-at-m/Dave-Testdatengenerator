@@ -1,13 +1,13 @@
 appswitcher.apps:
   vue-devtools:
     display-name: Vue Devtools
-    url: http://localhost:8081/__devtools__/
+    url: http://localhost:8088/__devtools__/
     image-url: http://localhost:8084/logos/Vue.png
     tags:
       - global
   swagger-ui:
     display-name: SwaggerUI
-    url: http://localhost:8086/swagger-ui/index.html
+    url: http://localhost:8087/swagger-ui/index.html
     image-url: http://localhost:8084/logos/Swagger.png
     tags:
       - global
