@@ -1,0 +1,110 @@
+{
+  "app": {
+    "name": {
+      "part1": "DAVe ",
+      "part2": "Testdaten-Generator",
+      "full": "@:app.name.part1@:app.name.part2"
+    }
+  },
+  "common": {
+    "yes": "Ja",
+    "no": "Nein",
+    "actions": {
+      "close": "Schließen",
+      "search": "Suchen",
+      "back": "Zurück",
+      "next": "Weiter",
+      "reset": "Zurücksetzen"
+    },
+    "messages": {}
+  },
+  "views": {
+    "index": {
+      "navText": "Testdaten",
+      "header": "DAVe Testdaten-Generator"
+    },
+    "getStarted": {
+      "navText": "Get Started",
+      "header": "Get Started",
+      "docsText": "Dokumentation für die RefArch ist hier zu finden:",
+      "docsLinks": {
+        "templates": "Dokumentation RefArch-Templates",
+        "main": "Dokumentation RefArch"
+      },
+      "saveLeave": {
+        "title": "Wirklich verlassen?",
+        "text": "Wollen Sie wirklich nicht die Dokumentation anschauen?"
+      }
+    },
+    "testdaten": {
+      "title": "Testdaten erzeugen",
+      "steps": {
+        "zaehlstelle": "Zählstelle",
+        "konfiguration": "Konfiguration",
+        "beziehungen": "Verkehrsbeziehungen",
+        "csv": "CSV erzeugen",
+        "import": "Einspielen"
+      },
+      "zaehlstelle": {
+        "hinweis": "Die Suche im DAVe-Backend ist optional. Für die reine CSV-Erzeugung genügt es, eine Zählstellennummer manuell einzugeben. Nur das Einspielen (letzter Schritt) benötigt ein erreichbares DAVe-Backend und eine gültige Zählstellen-ID.",
+        "sucheTitel": "Im DAVe-Backend suchen (optional)",
+        "searchLabel": "Zählstelle suchen (Nummer, Name, Stadtbezirk)",
+        "noResults": "Keine Zählstellen gefunden.",
+        "manuellTitel": "Zählstelle manuell eingeben",
+        "selected": "Ausgewählte Zählstelle",
+        "nummer": "Zählstellennummer",
+        "nummerHint": "Pflichtfeld – wird für Dateiname und CSV-Kopf verwendet.",
+        "name": "Name / Kreuzungsname",
+        "stadtbezirk": "Stadtbezirk",
+        "importFelder": "Felder für das Einspielen (optional)",
+        "id": "Zählstellen-ID (nur für Einspielen)",
+        "lat": "Breitengrad (lat)",
+        "lng": "Längengrad (lng)"
+      },
+      "konfiguration": {
+        "zaehlart": "Zählart",
+        "zaehldauer": "Zähldauer",
+        "datum": "Datum",
+        "kategorien": "Fahrzeugtypen",
+        "kreisverkehr": "Kreisverkehr",
+        "sonderzaehlung": "Sonderzählung",
+        "kreuzungsname": "Kreuzungsname",
+        "projektNummer": "Projektnummer",
+        "projektName": "Projektname",
+        "kommentar": "Kommentar",
+        "wetter": "Wetter",
+        "dienstleisterkennung": "Dienstleisterkennung",
+        "knotenarme": "Knotenarme",
+        "knotenarmHinzufuegen": "Knotenarm hinzufügen",
+        "armNummer": "Nr.",
+        "armStrasse": "Straßenname",
+        "intervalle": "Intervalle je Beziehung: {count}"
+      },
+      "beziehungen": {
+        "intro": "Wählen Sie die Verkehrsbeziehungen (Pfeile), für die Testdaten erzeugt werden sollen.",
+        "alleWaehlen": "Alle auswählen",
+        "keineGewaehlt": "Es ist noch keine Verkehrsbeziehung ausgewählt.",
+        "anzahlGewaehlt": "{count} ausgewählt"
+      },
+      "csv": {
+        "generieren": "CSV generieren",
+        "download": "Download",
+        "downloadAlle": "Alle herunterladen",
+        "datei": "Datei",
+        "keine": "Es wurden noch keine CSV-Daten erzeugt."
+      },
+      "import": {
+        "hinweis": "Das Einspielen sendet die Daten an das DAVe-Backend und benötigt ein erreichbares Backend sowie eine gültige Zählstellen-ID aus Schritt 1.",
+        "fehlendeId": "Es ist keine Zählstellen-ID hinterlegt. Ohne ID kann nicht eingespielt werden – bitte in Schritt 1 eine Zählstelle aus dem DAVe-Backend wählen oder eine ID eintragen. Die CSV-Erzeugung funktioniert auch ohne ID.",
+        "zielStatus": "Zielstatus",
+        "starten": "Testdaten einspielen",
+        "erfolg": "Testdaten erfolgreich eingespielt.",
+        "fehler": "Der Import ist fehlgeschlagen.",
+        "schritte": "Ablauf",
+        "zaehlungId": "Zählungs-ID"
+      }
+    }
+  },
+  "components": {},
+  "domain": {}
+}

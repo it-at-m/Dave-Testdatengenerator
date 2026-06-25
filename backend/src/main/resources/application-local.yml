@@ -1,0 +1,42 @@
+server:
+  port: 8086
+
+# Inbound auth is disabled via the "no-security" profile (pulled in by "local").
+# SecurityProperties.clientId is still validated as @NotBlank because the logging
+# filter always injects it, so provide a dummy value for local dev (unused here).
+refarch:
+  security:
+    client-id: local-dev
+
+# DAVe backend to import into. Point this at your locally running dave-backend
+# (started via runLocalNoSecurity). Override base-url if it does not listen on 8080.
+dave:
+  backend:
+    base-url: http://localhost:8080
+    auth:
+      mode: none
+
+management:
+  endpoints:
+    access:
+      default: unrestricted # Required for local debugging via JMX+RMI
+  endpoint:
+    health:
+      show-details: always
+
+# Enable swagger-ui locally (also used as source for the OpenAPI spec generation)
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    enabled: true
+
+logging:
+  include-application-group: false
+  structured:
+    format:
+      console: # empty disables structured logging locally
+  level:
+    root: INFO
+    de.muenchen: DEBUG
+    org.springframework.web: DEBUG

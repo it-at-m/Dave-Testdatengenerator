@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DAVe Testdaten-Generator — Pitch</title>
+    <style>
+      :root {
+        --ink: #16161a;
+        --muted: #5c5c66;
+        --bg: #fbfbf8;
+        --card: #ffffff;
+        --accent: #ffcc00; /* München-Gelb */
+        --accent-deep: #d8a900;
+        --line: #ececE4;
+        --radius: 20px;
+        --maxw: 1040px;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body { height: 100%; }
+
+      body {
+        font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        overflow: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* progress bar */
+      #progress {
+        position: fixed; top: 0; left: 0; height: 4px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-deep));
+        width: 0; z-index: 50; transition: width .35s cubic-bezier(.4,0,.2,1);
+      }
+
+      .deck { height: 100vh; width: 100vw; position: relative; }
+
+      .slide {
+        position: absolute; inset: 0;
+        display: none;
+        padding: clamp(32px, 7vh, 96px) clamp(28px, 8vw, 120px);
+        flex-direction: column; justify-content: center;
+      }
+      .slide.active { display: flex; animation: rise .5s cubic-bezier(.2,.7,.2,1); }
+
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(18px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      .inner { width: 100%; max-width: var(--maxw); margin: 0 auto; }
+
+      .kicker {
+        display: inline-flex; align-items: center; gap: 10px;
+        font-size: clamp(12px, 1.4vw, 15px); font-weight: 700;
+        letter-spacing: .16em; text-transform: uppercase;
+        color: var(--muted); margin-bottom: 22px;
+      }
+      .kicker::before {
+        content: ""; width: 26px; height: 3px; border-radius: 3px;
+        background: var(--accent);
+      }
+
+      h1 {
+        font-size: clamp(40px, 7vw, 88px); line-height: 1.02;
+        font-weight: 800; letter-spacing: -.02em;
+      }
+      h2 {
+        font-size: clamp(30px, 5vw, 56px); line-height: 1.06;
+        font-weight: 800; letter-spacing: -.02em; margin-bottom: 30px;
+      }
+      .lede {
+        font-size: clamp(18px, 2.3vw, 26px); color: var(--muted);
+        max-width: 760px; margin-top: 22px; line-height: 1.45;
+      }
+      .mark { background: linear-gradient(transparent 62%, var(--accent) 62%); padding: 0 2px; }
+
+      ul.points { list-style: none; display: grid; gap: 16px; margin-top: 8px; }
+      ul.points li {
+        display: flex; gap: 16px; align-items: flex-start;
+        font-size: clamp(17px, 2vw, 23px); line-height: 1.4;
+      }
+      ul.points li::before {
+        content: ""; flex: 0 0 auto; margin-top: .55em;
+        width: 12px; height: 12px; border-radius: 4px;
+        background: var(--accent); box-shadow: 0 0 0 4px rgba(255,204,0,.18);
+      }
+      ul.points li b { font-weight: 700; }
+      ul.points li span { color: var(--muted); }
+
+      /* two-column cards */
+      .grid {
+        display: grid; grid-template-columns: repeat(2, 1fr);
+        gap: 18px; margin-top: 10px;
+      }
+      .card {
+        background: var(--card); border: 1px solid var(--line);
+        border-radius: var(--radius); padding: 24px 26px;
+      }
+      .card h3 { font-size: clamp(16px, 1.8vw, 20px); margin-bottom: 8px; }
+      .card p { color: var(--muted); font-size: clamp(14px, 1.6vw, 17px); line-height: 1.45; }
+      .card .ico {
+        width: 40px; height: 40px; border-radius: 11px; margin-bottom: 14px;
+        display: grid; place-items: center; font-size: 20px;
+        background: #fff8d6; border: 1px solid #f3e08a;
+      }
+
+      /* approach: two-step process + people row */
+      .process { display: grid; grid-template-columns: 1fr 56px 1fr; align-items: center; gap: 18px; margin-top: 6px; }
+      .process .arrow { text-align: center; font-size: 40px; font-weight: 700; color: var(--accent-deep); }
+      .people { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 34px; }
+      .people .person {
+        width: 46px; height: 46px; border-radius: 50%; font-size: 20px;
+        display: grid; place-items: center;
+        background: #fff8d6; border: 1px solid #f3e08a;
+      }
+      .people .plbl { color: var(--muted); font-size: clamp(14px, 1.7vw, 18px); margin-left: 8px; }
+
+      /* metrics */
+      .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 14px; }
+      .metric { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
+      .metric .num { font-size: clamp(34px, 5vw, 56px); font-weight: 800; letter-spacing: -.02em; }
+      .metric .num .u { color: var(--accent-deep); }
+      .metric .lbl { color: var(--muted); font-size: clamp(13px, 1.5vw, 16px); margin-top: 6px; }
+
+      /* stepper graphic on title */
+      .stepper { display: flex; align-items: center; gap: 0; margin-top: 44px; flex-wrap: wrap; }
+      .step { display: flex; align-items: center; }
+      .step .dot {
+        width: 38px; height: 38px; border-radius: 50%;
+        background: var(--card); border: 2px solid var(--line);
+        display: grid; place-items: center; font-weight: 700; font-size: 15px; color: var(--muted);
+      }
+      .step .dot.on { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+      .step .nm { margin-left: 10px; margin-right: 16px; font-size: 15px; color: var(--muted); }
+      .step .bar { width: 26px; height: 2px; background: var(--line); margin-right: 16px; }
+
+      /* footer / chrome */
+      .footer {
+        position: fixed; bottom: 22px; left: clamp(28px, 8vw, 120px);
+        right: clamp(28px, 8vw, 120px);
+        display: flex; align-items: center; justify-content: space-between;
+        font-size: 13px; color: var(--muted); z-index: 40;
+      }
+      .brand { font-weight: 700; color: var(--ink); letter-spacing: -.01em; }
+      .brand .y { color: var(--accent-deep); }
+      .nav { display: flex; align-items: center; gap: 14px; }
+      .nav button {
+        width: 38px; height: 38px; border-radius: 50%;
+        border: 1px solid var(--line); background: var(--card); color: var(--ink);
+        font-size: 17px; cursor: pointer; transition: .15s;
+      }
+      .nav button:hover { border-color: var(--accent); background: #fffdf2; }
+      .nav .count { font-variant-numeric: tabular-nums; min-width: 44px; text-align: center; }
+
+      .hint { position: fixed; top: 18px; right: 22px; font-size: 12px; color: #b9b9b0; z-index: 40; }
+
+      @media (max-width: 720px) {
+        .grid, .metrics { grid-template-columns: 1fr; }
+        .process { grid-template-columns: 1fr; }
+        .process .arrow { transform: rotate(90deg); }
+        .stepper { gap: 6px; }
+        .step .nm { display: none; }
+        .step .bar { width: 14px; margin-right: 6px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="progress"></div>
+    <div class="hint">← / → blättern</div>
+
+    <div class="deck" id="deck">
+      <!-- 1 — Title -->
+      <section class="slide active">
+        <div class="inner">
+          <div class="kicker">DAVe · Verkehrszählungen · it@M</div>
+          <h1>Testdaten‑<br />Generator</h1>
+          <p class="lede">
+            Realistische Zähldaten für DAVe — <span class="mark">auf Knopfdruck</span>,
+            reproduzierbar und im korrekten Format. Statt mühsamer Handarbeit.
+          </p>
+          <div class="stepper" aria-hidden="true">
+            <div class="step"><div class="dot on">1</div><div class="nm">Zählstelle</div><div class="bar"></div></div>
+            <div class="step"><div class="dot on">2</div><div class="nm">Konfiguration</div><div class="bar"></div></div>
+            <div class="step"><div class="dot on">3</div><div class="nm">Beziehungen</div><div class="bar"></div></div>
+            <div class="step"><div class="dot on">4</div><div class="nm">CSV</div><div class="bar"></div></div>
+            <div class="step"><div class="dot on">5</div><div class="nm">Einspielen</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 — Challenge -->
+      <section class="slide">
+        <div class="inner">
+          <div class="kicker">Die Herausforderung</div>
+          <h2>Testzählungen anzulegen war Handarbeit — und fehleranfällig.</h2>
+          <ul class="points">
+            <li><span><b>Komplexes Format:</b> das CSV des Selfservice‑Portals, der ganze Dienstleister‑Flow und die Pfeile (Verkehrsbeziehungen) müssen exakt stimmen.</span></li>
+            <li><span><b>Strenge Plausibilitätsprüfung:</b> pro Beziehung muss <b>genau</b> die richtige Anzahl Zeitintervalle vorliegen — sonst weist das Backend die Zählung ab.</span></li>
+            <li><span><b>Schwergewichtiges Setup:</b> zum Entwickeln und Testen brauchte man bisher ein komplett laufendes DAVe‑Backend.</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 3 — Approach -->
+      <section class="slide">
+        <div class="inner">
+          <div class="kicker">Unser Vorgehen</div>
+          <h2>6 Personen, dieselbe Aufgabe — gebaut mit Claude&nbsp;Code.</h2>
+          <div class="process">
+            <div class="card">
+              <div class="ico">🔎</div>
+              <h3>1 · Verstehen</h3>
+              <p>Claude Code zuerst die DAVe‑Repositories und die Dokumentation gründlich analysieren lassen.</p>
+            </div>
+            <div class="arrow">→</div>
+            <div class="card">
+              <div class="ico">🛠️</div>
+              <h3>2 · Bauen</h3>
+              <p>Auf dieser Basis die fertige Anwendung erstellen lassen.</p>
+            </div>
+          </div>
+          <div class="people" aria-hidden="true">
+            <div class="person">🧑</div>
+            <div class="person">👩</div>
+            <div class="person">🧑</div>
+            <div class="person">👨</div>
+            <div class="person">👩</div>
+            <div class="person">🧑</div>
+            <span class="plbl">Gleiche Anweisung → <b>6 ähnliche, aber nicht identische</b> Lösungen.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 — Hurdles -->
+      <section class="slide">
+        <div class="inner">
+          <div class="kicker">Was knifflig war</div>
+          <h2>Der erste Wurf war erst der Anfang.</h2>
+          <div class="grid">
+            <div class="card">
+              <div class="ico">⚖️</div>
+              <h3>Komplexe Fachlichkeit</h3>
+              <p>Verkehrszählungen stecken voller Fachregeln. Die erste Version traf noch nicht alles — wir mussten die Anwendung mehrfach nachschärfen.</p>
+            </div>
+            <div class="card">
+              <div class="ico">🐳</div>
+              <h3>Den DAVe‑Stack hochfahren</h3>
+              <p>Um die Testdaten gegen das <b>echte</b> Backend zu schicken, mussten wir den kompletten DAVe‑Stack lokal zum Laufen bringen — aufwändig.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 — Solution -->
+      <section class="slide">
+        <div class="inner">
+          <div class="kicker">Die Lösung</div>
+          <h2>Ein geführter Assistent, der die Komplexität wegnimmt.</h2>
+          <div class="grid">
+            <div class="card">
+              <div class="ico">🧭</div>
+              <h3>Schritt für Schritt</h3>
+              <p>Ein klarer Assistent führt von der Auswahl bis zum fertigen Datensatz.</p>
+            </div>
+            <div class="card">
+              <div class="ico">⚙️</div>
+              <h3>Automatik statt Handarbeit</h3>
+              <p>Die App rechnet die Details selbst aus — gültige Daten ohne Fummelei.</p>
+            </div>
+            <div class="card">
+              <div class="ico">📄</div>
+              <h3>Fertige Dateien</h3>
+              <p>Daten im richtigen Format, direkt mit Vorschau und Download.</p>
+            </div>
+            <div class="card">
+              <div class="ico">🔌</div>
+              <h3>Ohne großes Setup</h3>
+              <p>Der Weg bis zum fertigen Datensatz läuft auch ohne angebundenes DAVe‑System.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6 — Results -->
+      <section class="slide">
+        <div class="inner">
+          <div class="kicker">Die Ergebnisse</div>
+          <h2>6 funktionierende Anwendungen — ähnlich, aber jede eigen.</h2>
+          <div class="metrics">
+            <div class="metric"><div class="num">6</div><div class="lbl">Personen — jede baute eine eigene Anwendung</div></div>
+            <div class="metric"><div class="num">6</div><div class="lbl">lauffähige Lösungen für dieselbe Aufgabe</div></div>
+            <div class="metric"><div class="num">≈</div><div class="lbl">ähnliche Wege, aber nicht identisch</div></div>
+          </div>
+          <ul class="points" style="margin-top:26px">
+            <li><span><b>Es funktioniert:</b> aus der Aufgabe sind echte, lauffähige Anwendungen entstanden.</span></li>
+            <li><span><b>Deutlich schneller:</b> fertige Testdaten auf Knopfdruck statt mühsamer Handarbeit.</span></li>
+            <li><span><b>Klares Muster:</b> erst verstehen, dann bauen — das zahlt sich aus.</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 — Close -->
+      <section class="slide">
+        <div class="inner">
+          <div class="kicker">Fazit</div>
+          <h1 style="font-size:clamp(34px,6vw,72px)">Aus mühsamer<br />Handarbeit wird<br /><span class="mark">ein Klick.</span></h1>
+          <p class="lede">Mit Claude Code: erst verstehen, dann bauen — 6× ausprobiert, 6× zum Ziel.</p>
+          <p class="lede" style="margin-top:16px;font-size:clamp(14px,1.6vw,18px)">Danke. Fragen?</p>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      <div class="brand">DAVe <span class="y">Testdaten‑Generator</span></div>
+      <div class="nav">
+        <button id="prev" aria-label="Zurück">‹</button>
+        <div class="count"><span id="cur">1</span> / <span id="total">6</span></div>
+        <button id="next" aria-label="Weiter">›</button>
+      </div>
+    </div>
+
+    <script>
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const total = slides.length;
+      let i = 0;
+      const curEl = document.getElementById("cur");
+      const progress = document.getElementById("progress");
+      document.getElementById("total").textContent = total;
+
+      function show(n) {
+        i = Math.max(0, Math.min(total - 1, n));
+        slides.forEach((s, idx) => s.classList.toggle("active", idx === i));
+        curEl.textContent = i + 1;
+        progress.style.width = ((i + 1) / total) * 100 + "%";
+      }
+      function next() { show(i + 1); }
+      function prev() { show(i - 1); }
+
+      document.getElementById("next").addEventListener("click", next);
+      document.getElementById("prev").addEventListener("click", prev);
+      document.addEventListener("keydown", (e) => {
+        if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); next(); }
+        else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); prev(); }
+        else if (e.key === "Home") show(0);
+        else if (e.key === "End") show(total - 1);
+      });
+
+      show(0);
+    </script>
+  </body>
+</html>
