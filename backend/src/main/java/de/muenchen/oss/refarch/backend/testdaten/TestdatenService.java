@@ -91,7 +91,7 @@ public class TestdatenService {
     }
 
     public GenerateCsvResponseDTO generiereCsv(final GenerateCsvRequestDTO request) {
-        final List<CsvDateiDTO> dateien = csvGenerator.generiere(request.config(), request.ausgewaehlteBeziehungen(), request.wertebereiche());
+        final List<CsvDateiDTO> dateien = csvGenerator.generiere(request.config(), request.ausgewaehlteBeziehungen(), request.datengenerierung());
         return new GenerateCsvResponseDTO(dateien);
     }
 

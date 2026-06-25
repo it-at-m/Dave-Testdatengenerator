@@ -55,7 +55,7 @@ class VerkehrsbeziehungFactoryTest {
     }
 
     @Test
-    void givenFjsMitArm5_thenKombinierteHimmelsrichtungenSoUndNw() {
+    void givenFjsMitDiagonalemArmFuenf_thenStrassenseitenSoUndNw() {
         final List<VerkehrsbeziehungOptionDTO> options = factory.moeglicheBeziehungen(
                 "FJS", false, List.of(new KnotenarmDTO(5, "Arm 5")));
 
@@ -68,7 +68,7 @@ class VerkehrsbeziehungFactoryTest {
     }
 
     @Test
-    void givenQuMitArm6_thenKombinierteHimmelsrichtungenNoUndSw() {
+    void givenQuMitDiagonalemArmSechs_thenRichtungenNoUndSw() {
         final List<VerkehrsbeziehungOptionDTO> options = factory.moeglicheBeziehungen(
                 "QU", false, List.of(new KnotenarmDTO(6, "Arm 6")));
 
@@ -79,7 +79,7 @@ class VerkehrsbeziehungFactoryTest {
     }
 
     @Test
-    void givenQjsMitArm7_thenKombinierteHimmelsrichtungenSoUndNw() {
+    void givenQjsMitDiagonalemArmSieben_thenStrassenseitenSoUndNw() {
         final List<VerkehrsbeziehungOptionDTO> options = factory.moeglicheBeziehungen(
                 "QJS", false, List.of(new KnotenarmDTO(7, "Arm 7")));
 

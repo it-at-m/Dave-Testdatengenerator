@@ -74,6 +74,36 @@ describe("testdaten store – Vorbelegung", () => {
     ]);
   });
 
+  test("Änderung an der Konfiguration verwirft erzeugte CSV-Dateien", async () => {
+    const store = useTestdatenStore();
+    store.csvDateien = [
+      { knotenarmNummer: 1, filename: "test.csv", content: "x" },
+    ];
+
+    store.config.kommentar = "geändert";
+    await nextTick();
+
+    expect(store.csvDateien).toHaveLength(0);
+  });
+
+  test("Änderung an der Datengenerierung verwirft erzeugte CSV-Dateien", async () => {
+    const store = useTestdatenStore();
+    store.csvDateien = [
+      { knotenarmNummer: 1, filename: "test.csv", content: "x" },
+    ];
+
+    store.datengenerierung.proFahrzeug.PKW.modus = "KONSTANT";
+    await nextTick();
+
+    expect(store.csvDateien).toHaveLength(0);
+  });
+
+  test("Datengenerierung ist standardmäßig zufällig je Fahrzeugtyp", () => {
+    const store = useTestdatenStore();
+    expect(store.datengenerierung.proFahrzeug.PKW.modus).toBe("ZUFALL");
+    expect(store.datengenerierung.proFahrzeug.FUSS.modus).toBe("ZUFALL");
+  });
+
   test("Wechsel zurück auf Normalzählung stellt alle außer Fuß wieder her", async () => {
     const store = useTestdatenStore();
     store.config.zaehlart = "FJS";

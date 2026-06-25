@@ -3,8 +3,10 @@ package de.muenchen.oss.refarch.backend.testdaten.csv;
 import de.muenchen.oss.refarch.backend.dave.client.enums.Zaehlart;
 import de.muenchen.oss.refarch.backend.dave.client.enums.Zaehldauer;
 import de.muenchen.oss.refarch.backend.testdaten.api.CsvDateiDTO;
+import de.muenchen.oss.refarch.backend.testdaten.api.DatengenerierungDTO;
+import de.muenchen.oss.refarch.backend.testdaten.api.DatengenerierungDTO.Modus;
+import de.muenchen.oss.refarch.backend.testdaten.api.DatengenerierungDTO.Spezifikation;
 import de.muenchen.oss.refarch.backend.testdaten.api.VerkehrsbeziehungOptionDTO;
-import de.muenchen.oss.refarch.backend.testdaten.api.WertebereicheDTO;
 import de.muenchen.oss.refarch.backend.testdaten.api.ZaehlungConfigDTO;
 import java.security.SecureRandom;
 import java.time.format.DateTimeFormatter;
@@ -33,12 +35,12 @@ public class CsvGeneratorService {
     private final Random random = new SecureRandom();
 
     public List<CsvDateiDTO> generiere(final ZaehlungConfigDTO config, final List<VerkehrsbeziehungOptionDTO> ausgewaehlteBeziehungen,
-            final WertebereicheDTO wertebereiche) {
+            final DatengenerierungDTO datengenerierung) {
         final Zaehldauer zaehldauer = Zaehldauer.valueOf(config.zaehldauer());
         final Zaehlart zaehlart = Zaehlart.valueOf(config.zaehlart());
         final List<ZaehldauerIntervalle.Slot> slots = ZaehldauerIntervalle.slotsFor(zaehldauer);
         final Spalten spalten = spaltenFuer(zaehlart, config.kategorien());
-        final Wertebereiche ranges = Wertebereiche.aus(wertebereiche);
+        final Generierung gen = new Generierung(datengenerierung, random);
 
         // group selected relations by their owning Knotenarm
         final Map<Integer, List<VerkehrsbeziehungOptionDTO>> proArm = new TreeMap<>();
@@ -52,7 +54,7 @@ public class CsvGeneratorService {
         final List<CsvDateiDTO> dateien = new ArrayList<>();
         for (final Map.Entry<Integer, List<VerkehrsbeziehungOptionDTO>> entry : proArm.entrySet()) {
             final int arm = entry.getKey();
-            final String content = baueDatei(config, zaehlart, arm, entry.getValue(), slots, spalten, ranges);
+            final String content = baueDatei(config, zaehlart, arm, entry.getValue(), slots, spalten, gen);
             final String filename = safe(config.zaehlstelleNummer()) + "_" + datumDatei + "_Knotenarm_" + arm + ".csv";
             dateien.add(new CsvDateiDTO(arm, filename, content));
         }
@@ -61,7 +63,7 @@ public class CsvGeneratorService {
 
     private String baueDatei(final ZaehlungConfigDTO config, final Zaehlart zaehlart, final int arm,
             final List<VerkehrsbeziehungOptionDTO> beziehungen, final List<ZaehldauerIntervalle.Slot> slots,
-            final Spalten spalten, final Wertebereiche ranges) {
+            final Spalten spalten, final Generierung gen) {
         final StringBuilder sb = new StringBuilder();
         final String zaehlartMeta = zaehlart == Zaehlart.N ? "" : zaehlart.name();
         final String datum = config.datum() == null ? "" : config.datum().format(DATUM_FORMAT);
@@ -72,31 +74,33 @@ public class CsvGeneratorService {
 
         for (final VerkehrsbeziehungOptionDTO beziehung : beziehungen) {
             final RelationDiskriminator.CsvColumns cols = RelationDiskriminator.csvColumns(beziehung);
-            for (final ZaehldauerIntervalle.Slot slot : slots) {
+            // Der Tagesgang (aufsteigend / realistisch) wird je Verkehrsbeziehung neu durchlaufen.
+            for (int i = 0; i < slots.size(); i++) {
+                final ZaehldauerIntervalle.Slot slot = slots.get(i);
+                final int stunde = stunde(slot.startUhrzeit());
                 sb.append(slot.nummer()).append(SEP)
                         .append(cols.nach()).append(SEP)
                         .append(cols.strassenseite()).append(SEP)
                         .append(cols.richtung()).append(SEP)
-                        .append(wert(spalten.pkw(), ranges.pkw())).append(SEP)
-                        .append(wert(spalten.lkw(), ranges.lkw())).append(SEP)
-                        .append(wert(spalten.lastzuege(), ranges.lastzuege())).append(SEP)
-                        .append(wert(spalten.busse(), ranges.busse())).append(SEP)
-                        .append(wert(spalten.kraftraeder(), ranges.kraftraeder())).append(SEP)
-                        .append(wert(spalten.fahrradfahrer(), ranges.fahrradfahrer())).append(SEP)
-                        .append(wert(spalten.fussgaenger(), ranges.fussgaenger()))
+                        .append(zelle(spalten.pkw(), "PKW", i, stunde, gen)).append(SEP)
+                        .append(zelle(spalten.lkw(), "LKW", i, stunde, gen)).append(SEP)
+                        .append(zelle(spalten.lastzuege(), "LZ", i, stunde, gen)).append(SEP)
+                        .append(zelle(spalten.busse(), "BUS", i, stunde, gen)).append(SEP)
+                        .append(zelle(spalten.kraftraeder(), "KRAD", i, stunde, gen)).append(SEP)
+                        .append(zelle(spalten.fahrradfahrer(), "RAD", i, stunde, gen)).append(SEP)
+                        .append(zelle(spalten.fussgaenger(), "FUSS", i, stunde, gen))
                         .append('\n');
             }
         }
         return sb.toString();
     }
 
-    private String wert(final boolean fill, final int[] range) {
-        if (!fill) {
-            return "";
-        }
-        final int min = range[0];
-        final int max = Math.max(range[0], range[1]);
-        return String.valueOf(min + random.nextInt((max - min) + 1));
+    private String zelle(final boolean fill, final String fahrzeug, final int intervallIndex, final int stunde, final Generierung gen) {
+        return fill ? String.valueOf(gen.wert(fahrzeug, intervallIndex, stunde)) : "";
+    }
+
+    private static int stunde(final String uhrzeit) {
+        return Integer.parseInt(uhrzeit.substring(0, 2));
     }
 
     private static String safe(final String value) {
@@ -132,24 +136,62 @@ public class CsvGeneratorService {
             boolean fahrradfahrer, boolean fussgaenger) {
     }
 
-    private record Wertebereiche(int[] pkw, int[] lkw, int[] lastzuege, int[] busse, int[] kraftraeder,
-            int[] fahrradfahrer, int[] fussgaenger) {
+    /**
+     * Computes the counting value for a vehicle class in a given interval, depending on the chosen
+     * {@link Modus}. Falls back to {@link Modus#ZUFALL} with a per-class default magnitude when no
+     * specification is provided.
+     */
+    private static final class Generierung {
 
-        static Wertebereiche aus(final WertebereicheDTO dto) {
-            return new Wertebereiche(
-                    range(dto == null ? null : dto.pkw(), 50, 300),
-                    range(dto == null ? null : dto.lkw(), 5, 40),
-                    range(dto == null ? null : dto.lastzuege(), 0, 10),
-                    range(dto == null ? null : dto.busse(), 0, 8),
-                    range(dto == null ? null : dto.kraftraeder(), 0, 15),
-                    range(dto == null ? null : dto.fahrradfahrer(), 0, 50),
-                    range(dto == null ? null : dto.fussgaenger(), 0, 60));
+        private static final Map<String, Integer> DEFAULT_WERT = Map.of(
+                "PKW", 300, "LKW", 40, "LZ", 10, "BUS", 8, "KRAD", 15, "RAD", 50, "FUSS", 60);
+
+        private final Map<String, Spezifikation> proFahrzeug;
+        private final Random random;
+
+        Generierung(final DatengenerierungDTO dto, final Random random) {
+            this.proFahrzeug = dto == null || dto.proFahrzeug() == null ? Map.of() : dto.proFahrzeug();
+            this.random = random;
         }
 
-        private static int[] range(final WertebereicheDTO.Range r, final int defMin, final int defMax) {
-            final int min = r == null || r.min() == null ? defMin : r.min();
-            final int max = r == null || r.max() == null ? defMax : r.max();
-            return new int[] { Math.min(min, max), Math.max(min, max) };
+        int wert(final String fahrzeug, final int intervallIndex, final int stunde) {
+            final Spezifikation spec = proFahrzeug.get(fahrzeug);
+            final Modus modus = spec == null || spec.modus() == null ? Modus.ZUFALL : spec.modus();
+            final int basis = spec == null || spec.wert() == null
+                    ? DEFAULT_WERT.getOrDefault(fahrzeug, 50)
+                    : Math.max(0, spec.wert());
+            return switch (modus) {
+                case KONSTANT -> basis;
+                case AUFSTEIGEND -> basis + intervallIndex;
+                case REALISTISCH -> (int) Math.round(basis * tagesgangFaktor(stunde));
+                case ZUFALL -> random.nextInt(basis + 1);
+            };
+        }
+
+        /**
+         * Daily traffic curve in [0,1] with a morning (~08:00) and an evening (~17:00) peak and a
+         * midday dip; nights are low. So Stoßzeiten erhalten mehr Verkehr als die Zeit dazwischen.
+         */
+        private static double tagesgangFaktor(final int stunde) {
+            return switch (stunde) {
+                case 6 -> 0.5;
+                case 7 -> 0.85;
+                case 8 -> 1.0;
+                case 9 -> 0.7;
+                case 10, 11 -> 0.5;
+                case 12 -> 0.55;
+                case 13, 14 -> 0.5;
+                case 15 -> 0.65;
+                case 16 -> 0.85;
+                case 17 -> 1.0;
+                case 18 -> 0.8;
+                case 19 -> 0.6;
+                case 20 -> 0.4;
+                case 21 -> 0.3;
+                case 22 -> 0.2;
+                case 5 -> 0.2;
+                default -> 0.05; // 23:00 - 04:00 (Nacht)
+            };
         }
     }
 }

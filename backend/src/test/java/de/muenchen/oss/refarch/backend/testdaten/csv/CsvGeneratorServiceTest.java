@@ -6,11 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.muenchen.oss.refarch.backend.testdaten.VerkehrsbeziehungFactory;
 import de.muenchen.oss.refarch.backend.testdaten.api.CsvDateiDTO;
+import de.muenchen.oss.refarch.backend.testdaten.api.DatengenerierungDTO;
+import de.muenchen.oss.refarch.backend.testdaten.api.DatengenerierungDTO.Modus;
+import de.muenchen.oss.refarch.backend.testdaten.api.DatengenerierungDTO.Spezifikation;
 import de.muenchen.oss.refarch.backend.testdaten.api.KnotenarmDTO;
 import de.muenchen.oss.refarch.backend.testdaten.api.VerkehrsbeziehungOptionDTO;
 import de.muenchen.oss.refarch.backend.testdaten.api.ZaehlungConfigDTO;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class CsvGeneratorServiceTest {
@@ -78,6 +82,55 @@ class CsvGeneratorServiceTest {
         assertEquals("", cols[10], "Fuss darf bei der Normalzählung nicht gefüllt sein");
     }
 
+    @Test
+    void givenKonstanteGenerierung_thenAlleWerteGleich() {
+        final DatengenerierungDTO gen = new DatengenerierungDTO(Map.of("PKW", new Spezifikation(Modus.KONSTANT, 42)));
+        final CsvDateiDTO datei = generiereMit("N", List.of("PKW"), List.of(new KnotenarmDTO(1, "Arm 1")),
+                "DAUER_2_X_4_STUNDEN", gen).get(0);
+
+        final int[] pkw = spaltenwerte(datei, 4);
+        assertTrue(pkw.length > 1);
+        for (final int v : pkw) {
+            assertEquals(42, v);
+        }
+    }
+
+    @Test
+    void givenAufsteigendeGenerierung_thenJeIntervallPlusEins() {
+        final DatengenerierungDTO gen = new DatengenerierungDTO(Map.of("PKW", new Spezifikation(Modus.AUFSTEIGEND, 10)));
+        // Nur eine Verkehrsbeziehung (Arm 1 -> Arm 1), damit die Reihe nicht zurückgesetzt wird.
+        final CsvDateiDTO datei = generiereMit("N", List.of("PKW"), List.of(new KnotenarmDTO(1, "Arm 1")),
+                "DAUER_2_X_4_STUNDEN", gen).get(0);
+
+        final int[] pkw = spaltenwerte(datei, 4);
+        assertEquals(10, pkw[0], "Startwert");
+        for (int i = 1; i < pkw.length; i++) {
+            assertEquals(pkw[i - 1] + 1, pkw[i], "jedes Intervall + 1");
+        }
+    }
+
+    @Test
+    void givenZufallsGenerierung_thenWerteImBereichNullBisWert() {
+        final DatengenerierungDTO gen = new DatengenerierungDTO(Map.of("PKW", new Spezifikation(Modus.ZUFALL, 5)));
+        final CsvDateiDTO datei = generiereMit("N", List.of("PKW"), List.of(new KnotenarmDTO(1, "Arm 1")),
+                "DAUER_2_X_4_STUNDEN", gen).get(0);
+
+        for (final int v : spaltenwerte(datei, 4)) {
+            assertTrue(v >= 0 && v <= 5, "Wert außerhalb [0,5]: " + v);
+        }
+    }
+
+    @Test
+    void givenRealistischeGenerierung_thenStosszeitGroesserAlsNacht() {
+        final DatengenerierungDTO gen = new DatengenerierungDTO(Map.of("PKW", new Spezifikation(Modus.REALISTISCH, 100)));
+        final CsvDateiDTO datei = generiereMit("N", List.of("PKW"), List.of(new KnotenarmDTO(1, "Arm 1")),
+                "DAUER_24_STUNDEN", gen).get(0);
+
+        // Intervall 33 startet 08:00 (Stoßzeit), Intervall 13 startet 03:00 (Nacht).
+        assertTrue(pkwBeiIntervall(datei, 33) > pkwBeiIntervall(datei, 13),
+                "Stoßzeit (08:00) muss mehr Verkehr haben als die Nacht (03:00)");
+    }
+
     private void nurRadUndFussGefuellt(final String[] cols) {
         // Spalten 4..8 = Pkw,Lkw,Lz,Bus,Krad leer; 9..10 = Rad,Fuss gefüllt
         for (int i = 4; i <= 8; i++) {
@@ -89,13 +142,39 @@ class CsvGeneratorServiceTest {
 
     private List<CsvDateiDTO> generiere(final String zaehlart, final List<String> kategorien, final List<KnotenarmDTO> arme) {
         final List<VerkehrsbeziehungOptionDTO> beziehungen = factory.moeglicheBeziehungen(zaehlart, false, arme);
-        return generator.generiere(config(zaehlart, kategorien, arme), beziehungen, null);
+        return generator.generiere(config(zaehlart, kategorien, arme, "DAUER_2_X_4_STUNDEN"), beziehungen, null);
     }
 
-    private ZaehlungConfigDTO config(final String zaehlart, final List<String> kategorien, final List<KnotenarmDTO> arme) {
+    private List<CsvDateiDTO> generiereMit(final String zaehlart, final List<String> kategorien, final List<KnotenarmDTO> arme,
+            final String zaehldauer, final DatengenerierungDTO gen) {
+        final List<VerkehrsbeziehungOptionDTO> beziehungen = factory.moeglicheBeziehungen(zaehlart, false, arme);
+        return generator.generiere(config(zaehlart, kategorien, arme, zaehldauer), beziehungen, gen);
+    }
+
+    private ZaehlungConfigDTO config(final String zaehlart, final List<String> kategorien, final List<KnotenarmDTO> arme,
+            final String zaehldauer) {
         return new ZaehlungConfigDTO(
-                "id", NUMMER, null, null, DATUM, zaehlart, "DAUER_2_X_4_STUNDEN", 15,
+                "id", NUMMER, null, null, DATUM, zaehlart, zaehldauer, 15,
                 false, false, null, null, null, "Testdaten", null, null, "testdaten", kategorien, arme);
+    }
+
+    /** Liefert die Werte einer Datenspalte (z.B. 4 = Pkw) über alle Datenzeilen. */
+    private int[] spaltenwerte(final CsvDateiDTO datei, final int spalte) {
+        final String[] zeilen = datei.content().split("\\r?\\n");
+        return java.util.Arrays.stream(zeilen, 3, zeilen.length)
+                .map(z -> z.split(";", -1)[spalte])
+                .mapToInt(Integer::parseInt)
+                .toArray();
+    }
+
+    /** Liefert den Pkw-Wert der Datenzeile mit der gegebenen Intervallnummer. */
+    private int pkwBeiIntervall(final CsvDateiDTO datei, final int intervallnummer) {
+        final String[] zeilen = datei.content().split("\\r?\\n");
+        return java.util.Arrays.stream(zeilen, 3, zeilen.length)
+                .map(z -> z.split(";", -1))
+                .filter(c -> Integer.parseInt(c[0]) == intervallnummer)
+                .mapToInt(c -> Integer.parseInt(c[4]))
+                .findFirst().orElseThrow();
     }
 
     private String zeile(final CsvDateiDTO datei, final int index) {

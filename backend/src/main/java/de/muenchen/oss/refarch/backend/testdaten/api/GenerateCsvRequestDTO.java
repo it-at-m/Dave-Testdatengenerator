@@ -8,5 +8,5 @@ import java.util.List;
 public record GenerateCsvRequestDTO(
         ZaehlungConfigDTO config,
         List<VerkehrsbeziehungOptionDTO> ausgewaehlteBeziehungen,
-        WertebereicheDTO wertebereiche) {
+        DatengenerierungDTO datengenerierung) {
 }

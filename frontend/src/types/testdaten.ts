@@ -94,10 +94,26 @@ export interface CsvDatei {
   content: string;
 }
 
+export type Verteilungsmodus =
+  | "KONSTANT"
+  | "AUFSTEIGEND"
+  | "REALISTISCH"
+  | "ZUFALL";
+
+export interface FahrzeugGenerierung {
+  modus: Verteilungsmodus;
+  wert: number;
+}
+
+export interface Datengenerierung {
+  /** Generierungseinstellung je Fahrzeugcode (PKW, LKW, ... ). */
+  proFahrzeug: Record<string, FahrzeugGenerierung>;
+}
+
 export interface GenerateCsvRequest {
   config: ZaehlungConfig;
   ausgewaehlteBeziehungen: VerkehrsbeziehungOption[];
-  wertebereiche: null;
+  datengenerierung: Datengenerierung;
 }
 
 export interface GenerateCsvResponse {

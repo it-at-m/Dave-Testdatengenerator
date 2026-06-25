@@ -91,7 +91,25 @@
         "download": "Download",
         "downloadAlle": "Alle herunterladen",
         "datei": "Datei",
-        "keine": "Es wurden noch keine CSV-Daten erzeugt."
+        "keine": "Es wurden noch keine CSV-Daten erzeugt.",
+        "datengenerierung": {
+          "titel": "Datengenerierung je Fahrzeugtyp",
+          "intro": "Legen Sie fest, wie die Zählwerte je gewähltem Fahrzeugtyp erzeugt werden.",
+          "modus": "Verteilung",
+          "wert": "Wert",
+          "modi": {
+            "KONSTANT": "Durchgehend selbe Zahl",
+            "AUFSTEIGEND": "Aufsteigend (+1 je Intervall)",
+            "REALISTISCH": "Realistisch verteilt (Stoßzeiten)",
+            "ZUFALL": "Komplett zufällig"
+          },
+          "hint": {
+            "KONSTANT": "Konstanter Wert in jedem Intervall.",
+            "AUFSTEIGEND": "Startwert, danach je Intervall um 1 erhöht.",
+            "REALISTISCH": "Spitzenwert zur Stoßzeit (morgens/abends mehr als dazwischen).",
+            "ZUFALL": "Maximalwert – zufällig zwischen 0 und diesem Wert."
+          }
+        }
       },
       "import": {
         "hinweis": "Das Einspielen sendet die Daten an das DAVe-Backend und benötigt ein erreichbares Backend sowie eine gültige Zählstellen-ID aus Schritt 1.",

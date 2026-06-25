@@ -1,5 +1,7 @@
 import type {
   CsvDatei,
+  Datengenerierung,
+  FahrzeugGenerierung,
   ImportResult,
   Knotenarm,
   OptionsResponse,
@@ -51,6 +53,28 @@ function defaultKnotenarmeFor(zaehlart: string): Knotenarm[] {
     : [{ nummer: 1, strassenname: "Arm 1" }];
 }
 
+/**
+ * Standard-Magnitude je Fahrzeugtyp (gespiegelt aus dem Backend-Generator): wird als
+ * Konstante/Startwert/Spitzenwert/Maximum je nach gewähltem Modus interpretiert.
+ */
+const FAHRZEUG_DEFAULT_WERT: Record<string, number> = {
+  PKW: 300,
+  LKW: 40,
+  LZ: 10,
+  BUS: 8,
+  KRAD: 15,
+  RAD: 50,
+  FUSS: 60,
+};
+
+function defaultDatengenerierung(): Datengenerierung {
+  const proFahrzeug: Record<string, FahrzeugGenerierung> = {};
+  for (const [code, wert] of Object.entries(FAHRZEUG_DEFAULT_WERT)) {
+    proFahrzeug[code] = { modus: "ZUFALL", wert };
+  }
+  return { proFahrzeug };
+}
+
 function defaultConfig(): ZaehlungConfig {
   const zaehlart = "N";
   return {
@@ -85,6 +109,7 @@ export const useTestdatenStore = defineStore("testdaten", () => {
   const options = ref<OptionsResponse | null>(null);
   const suggestions = ref<ZaehlstelleSuggest[]>([]);
   const config = ref<ZaehlungConfig>(defaultConfig());
+  const datengenerierung = ref<Datengenerierung>(defaultDatengenerierung());
   const relationOptions = ref<VerkehrsbeziehungOption[]>([]);
   const selectedKeys = ref<string[]>([]);
   const csvDateien = ref<CsvDatei[]>([]);
@@ -108,6 +133,18 @@ export const useTestdatenStore = defineStore("testdaten", () => {
         config.value.knotenarme = defaultKnotenarmeFor(zaehlart);
       }
     }
+  );
+
+  // Bereits erzeugte CSV-Dateien verwerfen, sobald sich etwas an der Konfiguration,
+  // der Auswahl der Verkehrsbeziehungen oder der Datengenerierung ändert. Damit liegt
+  // nie ein veraltetes CSV (oder Import-Ergebnis) zu einer geänderten Konfiguration vor.
+  watch(
+    [config, selectedKeys, datengenerierung],
+    () => {
+      csvDateien.value = [];
+      importResult.value = null;
+    },
+    { deep: true }
   );
 
   function reportError(error: unknown): void {
@@ -184,7 +221,7 @@ export const useTestdatenStore = defineStore("testdaten", () => {
       const response = await generateCsv({
         config: config.value,
         ausgewaehlteBeziehungen: selectedBeziehungen.value,
-        wertebereiche: null,
+        datengenerierung: datengenerierung.value,
       });
       csvDateien.value = response.dateien;
     } catch (error) {
@@ -226,6 +263,7 @@ export const useTestdatenStore = defineStore("testdaten", () => {
     step.value = 1;
     suggestions.value = [];
     config.value = defaultConfig();
+    datengenerierung.value = defaultDatengenerierung();
     relationOptions.value = [];
     selectedKeys.value = [];
     csvDateien.value = [];
@@ -239,6 +277,7 @@ export const useTestdatenStore = defineStore("testdaten", () => {
     options,
     suggestions,
     config,
+    datengenerierung,
     relationOptions,
     selectedKeys,
     csvDateien,

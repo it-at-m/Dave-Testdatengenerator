@@ -364,6 +364,53 @@
       <!-- Step 4: CSV -->
       <template #item.4>
         <v-card flat>
+          <div class="text-subtitle-1 mb-1">
+            {{ t("views.testdaten.csv.datengenerierung.titel") }}
+          </div>
+          <p class="text-caption mb-2">
+            {{ t("views.testdaten.csv.datengenerierung.intro") }}
+          </p>
+          <v-row
+            v-for="eintrag in generierbareEintraege"
+            :key="eintrag.code"
+            dense
+            align="center"
+          >
+            <v-col
+              cols="12"
+              md="3"
+            >
+              <span class="text-body-2">{{ fahrzeugLabel(eintrag.code) }}</span>
+            </v-col>
+            <v-col
+              cols="8"
+              md="6"
+            >
+              <v-select
+                v-model="eintrag.gen.modus"
+                :items="generierungModi"
+                :label="t('views.testdaten.csv.datengenerierung.modus')"
+                :hint="t(`views.testdaten.csv.datengenerierung.hint.${eintrag.gen.modus}`)"
+                persistent-hint
+                density="compact"
+              />
+            </v-col>
+            <v-col
+              cols="4"
+              md="3"
+            >
+              <v-text-field
+                v-model.number="eintrag.gen.wert"
+                type="number"
+                min="0"
+                :label="t('views.testdaten.csv.datengenerierung.wert')"
+                density="compact"
+              />
+            </v-col>
+          </v-row>
+
+          <v-divider class="my-3" />
+
           <div class="d-flex ga-2 mb-3">
             <v-btn
               color="primary"
@@ -528,7 +575,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CsvDatei } from "@/types/testdaten";
+import type { CsvDatei, FahrzeugGenerierung } from "@/types/testdaten";
 
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -548,6 +595,36 @@ const stepTitles = computed(() => [
   t("views.testdaten.steps.csv"),
   t("views.testdaten.steps.import"),
 ]);
+
+const VERTEILUNGSMODI = [
+  "KONSTANT",
+  "AUFSTEIGEND",
+  "REALISTISCH",
+  "ZUFALL",
+] as const;
+
+const generierungModi = computed(() =>
+  VERTEILUNGSMODI.map((modus) => ({
+    value: modus,
+    title: t(`views.testdaten.csv.datengenerierung.modi.${modus}`),
+  }))
+);
+
+// Nur Fahrzeugklassen mit einer Generierungseinstellung anbieten (die Aggregat-
+// kategorien wie Kfz/Schwerverkehr werden vom Generator ohnehin nicht befüllt).
+const generierbareEintraege = computed(() =>
+  store.config.kategorien
+    .map((code) => ({ code, gen: store.datengenerierung.proFahrzeug[code] }))
+    .filter(
+      (e): e is { code: string; gen: FahrzeugGenerierung } => e.gen != null
+    )
+);
+
+function fahrzeugLabel(code: string): string {
+  return (
+    store.options?.fahrzeuge.find((f) => f.code === code)?.label ?? code
+  );
+}
 
 const intervallHint = computed(() => {
   const info = store.options?.zaehldauern.find(
