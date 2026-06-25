@@ -55,6 +55,41 @@ class VerkehrsbeziehungFactoryTest {
     }
 
     @Test
+    void givenFjsMitArm5_thenKombinierteHimmelsrichtungenSoUndNw() {
+        final List<VerkehrsbeziehungOptionDTO> options = factory.moeglicheBeziehungen(
+                "FJS", false, List.of(new KnotenarmDTO(5, "Arm 5")));
+
+        // Arm 5 zeigt diagonal -> Achse SO/NW (vgl. KnotenLageForm.vue: Arm 5/7 -> NW/SO)
+        assertEquals(4, options.size());
+        assertTrue(enthaelt(options, "SO", "EIN"));
+        assertTrue(enthaelt(options, "SO", "AUS"));
+        assertTrue(enthaelt(options, "NW", "EIN"));
+        assertTrue(enthaelt(options, "NW", "AUS"));
+    }
+
+    @Test
+    void givenQuMitArm6_thenKombinierteHimmelsrichtungenNoUndSw() {
+        final List<VerkehrsbeziehungOptionDTO> options = factory.moeglicheBeziehungen(
+                "QU", false, List.of(new KnotenarmDTO(6, "Arm 6")));
+
+        // Arm 6 zeigt diagonal -> Achse NO/SW (vgl. KnotenLageForm.vue: Arm 6/8 -> NO/SW)
+        assertEquals(2, options.size());
+        assertTrue(options.stream().anyMatch(o -> "NO".equals(o.richtung())));
+        assertTrue(options.stream().anyMatch(o -> "SW".equals(o.richtung())));
+    }
+
+    @Test
+    void givenQjsMitArm7_thenKombinierteHimmelsrichtungenSoUndNw() {
+        final List<VerkehrsbeziehungOptionDTO> options = factory.moeglicheBeziehungen(
+                "QJS", false, List.of(new KnotenarmDTO(7, "Arm 7")));
+
+        // Arm 7 -> Arm 7 (Selbstbeziehung) mit Achse SO/NW
+        assertEquals(2, options.size());
+        assertTrue(options.stream().anyMatch(o -> "SO".equals(o.strassenseite())));
+        assertTrue(options.stream().anyMatch(o -> "NW".equals(o.strassenseite())));
+    }
+
+    @Test
     void givenKreuzungMitEinemArm_thenSelbstbeziehungWaehlbar() {
         final List<VerkehrsbeziehungOptionDTO> options = factory.moeglicheBeziehungen(
                 "N", false, List.of(new KnotenarmDTO(1, "Arm 1")));

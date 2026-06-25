@@ -115,12 +115,19 @@ public class VerkehrsbeziehungFactory {
 
     /**
      * Liefert die beiden gegenüberliegenden Straßenseiten/Himmelsrichtungen eines Knotenarms.
-     * Ungerade Arme erhalten die Ost-West-, gerade Arme die Nord-Süd-Achse - analog zu den
-     * Beispiel-Testdaten (examples/testdata: Arm 1/3 -> O/W, Arm 2/4 -> N/S).
+     * Die Arme 1-4 zeigen in die Haupt-, die Arme 5-8 in die kombinierten Himmelsrichtungen.
+     * Die Zuordnung entspricht der CSV-Upload-Validierung des Selfservice-Portals (KnotenLageForm.vue)
+     * und dem Belastungsplan des dave-frontend (BelastungsplanMethods.ts):
+     * Arm 1/3 -> O/W, Arm 2/4 -> N/S, Arm 5/7 -> SO/NW, Arm 6/8 -> NO/SW.
+     * Siehe docs/knotenarm-himmelsrichtung.md.
      */
     private List<Himmelsrichtung> strassenseitenFuerArm(final int arm) {
-        return Math.max(arm, 1) % 2 != 0
-                ? List.of(Himmelsrichtung.O, Himmelsrichtung.W)
-                : List.of(Himmelsrichtung.N, Himmelsrichtung.S);
+        return switch (arm) {
+            case 2, 4 -> List.of(Himmelsrichtung.N, Himmelsrichtung.S);
+            case 5, 7 -> List.of(Himmelsrichtung.SO, Himmelsrichtung.NW);
+            case 6, 8 -> List.of(Himmelsrichtung.NO, Himmelsrichtung.SW);
+            // Arm 1/3 sowie alle nicht abgedeckten (ungeraden) Arme: Ost-West-Achse.
+            default -> List.of(Himmelsrichtung.O, Himmelsrichtung.W);
+        };
     }
 }

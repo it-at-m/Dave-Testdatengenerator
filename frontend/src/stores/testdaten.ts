@@ -1,6 +1,7 @@
 import type {
   CsvDatei,
   ImportResult,
+  Knotenarm,
   OptionsResponse,
   VerkehrsbeziehungOption,
   ZaehlstelleSuggest,
@@ -35,6 +36,21 @@ function defaultKategorienFor(zaehlart: string): string[] {
     : ["PKW", "LKW", "LZ", "BUS", "KRAD", "RAD"];
 }
 
+/**
+ * Knotenarm-Vorbelegung je Zählart. Bei einer Querung (QU) wird immer über zwei
+ * gegenüberliegende Knotenarme gezählt, daher werden zwei (z.B. 2 und 4) vorbelegt.
+ * Gegenüberliegende Arme laut Belastungsplan: 1↔3, 2↔4, 5↔7, 6↔8.
+ * Sonst genügt ein einzelner Arm; weitere bleiben hinzufügbar.
+ */
+function defaultKnotenarmeFor(zaehlart: string): Knotenarm[] {
+  return zaehlart === "QU"
+    ? [
+        { nummer: 2, strassenname: "Arm 2" },
+        { nummer: 4, strassenname: "Arm 4" },
+      ]
+    : [{ nummer: 1, strassenname: "Arm 1" }];
+}
+
 function defaultConfig(): ZaehlungConfig {
   const zaehlart = "N";
   return {
@@ -56,7 +72,7 @@ function defaultConfig(): ZaehlungConfig {
     tagesTyp: null,
     dienstleisterkennung: "testdaten",
     kategorien: defaultKategorienFor(zaehlart),
-    knotenarme: [{ nummer: 1, strassenname: "Arm 1" }],
+    knotenarme: defaultKnotenarmeFor(zaehlart),
   };
 }
 
@@ -81,10 +97,16 @@ export const useTestdatenStore = defineStore("testdaten", () => {
 
   // Bei Wechsel der Zählart die Fahrzeugtypen passend vorbelegen:
   // Fuß/Rad-Zählarten (QU, FJS, QJS) -> nur Rad + Fuß, sonst alle außer Fuß.
+  // Zusätzlich für QU zwei gegenüberliegende Knotenarme vorbelegen (z.B. 2 und 4).
+  // Knotenarme nur beim Wechsel von/zu QU neu setzen, damit selbst eingegebene
+  // Straßennamen beim Wechsel zwischen anderen Zählarten erhalten bleiben.
   watch(
     () => config.value.zaehlart,
-    (zaehlart) => {
+    (zaehlart, vorher) => {
       config.value.kategorien = defaultKategorienFor(zaehlart);
+      if (zaehlart === "QU" || vorher === "QU") {
+        config.value.knotenarme = defaultKnotenarmeFor(zaehlart);
+      }
     }
   );
 

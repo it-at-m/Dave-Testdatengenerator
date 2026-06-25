@@ -37,6 +37,43 @@ describe("testdaten store – Vorbelegung", () => {
     }
   );
 
+  test("QU belegt zwei gegenüberliegende Knotenarme vor", async () => {
+    const store = useTestdatenStore();
+    expect(store.config.knotenarme).toHaveLength(1);
+
+    store.config.zaehlart = "QU";
+    await nextTick();
+
+    expect(store.config.knotenarme.map((a) => a.nummer)).toEqual([2, 4]);
+  });
+
+  test("Wechsel von QU zurück stellt einen einzelnen Knotenarm wieder her", async () => {
+    const store = useTestdatenStore();
+    store.config.zaehlart = "QU";
+    await nextTick();
+    expect(store.config.knotenarme).toHaveLength(2);
+
+    store.config.zaehlart = "N";
+    await nextTick();
+    expect(store.config.knotenarme.map((a) => a.nummer)).toEqual([1]);
+  });
+
+  test("Wechsel zwischen Nicht-QU-Zählarten lässt eigene Knotenarme unangetastet", async () => {
+    const store = useTestdatenStore();
+    store.config.knotenarme = [
+      { nummer: 1, strassenname: "Hauptstraße" },
+      { nummer: 2, strassenname: "Nebenstraße" },
+    ];
+
+    store.config.zaehlart = "FJS";
+    await nextTick();
+
+    expect(store.config.knotenarme).toEqual([
+      { nummer: 1, strassenname: "Hauptstraße" },
+      { nummer: 2, strassenname: "Nebenstraße" },
+    ]);
+  });
+
   test("Wechsel zurück auf Normalzählung stellt alle außer Fuß wieder her", async () => {
     const store = useTestdatenStore();
     store.config.zaehlart = "FJS";
