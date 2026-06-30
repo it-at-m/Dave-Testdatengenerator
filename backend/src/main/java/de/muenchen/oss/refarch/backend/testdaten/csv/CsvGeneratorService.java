@@ -69,7 +69,7 @@ public class CsvGeneratorService {
         final String datum = config.datum() == null ? "" : config.datum().format(DATUM_FORMAT);
         sb.append(META_HEADER).append('\n');
         sb.append(safe(config.zaehlstelleNummer())).append(SEP).append(zaehlartMeta).append(SEP)
-                .append(datum).append(SEP).append(arm).append(";;;;;").append('\n');
+                .append(datum).append(SEP).append(arm).append(";;;;;;;").append('\n');
         sb.append(DATA_HEADER).append('\n');
 
         for (final VerkehrsbeziehungOptionDTO beziehung : beziehungen) {
