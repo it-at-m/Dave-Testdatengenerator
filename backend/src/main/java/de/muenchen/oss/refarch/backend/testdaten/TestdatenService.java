@@ -38,7 +38,8 @@ import org.springframework.stereotype.Service;
 
 /**
  * Orchestrates the test-data workflow against the DAVe backend:
- * create Zählung → INSTRUCTED → re-read relation ids → upload intervals (saveExternal) → final status.
+ * create Zählung → INSTRUCTED → re-read relation ids → upload intervals (saveExternal) → final
+ * status.
  */
 @Service
 @RequiredArgsConstructor

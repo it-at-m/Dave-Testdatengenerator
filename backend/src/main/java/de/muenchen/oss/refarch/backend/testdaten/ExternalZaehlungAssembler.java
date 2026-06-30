@@ -17,7 +17,8 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 /**
- * Builds the {@link ExternalZaehlungDTO} sent to {@code /zaehlung/saveExternal}. The relations reuse
+ * Builds the {@link ExternalZaehlungDTO} sent to {@code /zaehlung/saveExternal}. The relations
+ * reuse
  * the same ids supplied when the Zählung was created (see {@link BearbeiteZaehlungAssembler}); the
  * CSV-derived time intervals are attached afterwards by the mapper.
  */
@@ -54,9 +55,9 @@ public class ExternalZaehlungAssembler {
         for (final VerkehrsbeziehungOptionDTO option : beziehungen) {
             final String id = idByOptionKey.get(option.key());
             switch (option.typ()) {
-                case VERKEHRSBEZIEHUNG -> verkehrsbeziehungen.add(toVerkehrsbeziehung(option, id));
-                case LAENGSVERKEHR -> laengsverkehr.add(toLaengsverkehr(option, id));
-                case QUERUNGSVERKEHR -> querungsverkehr.add(toQuerungsverkehr(option, id));
+            case VERKEHRSBEZIEHUNG -> verkehrsbeziehungen.add(toVerkehrsbeziehung(option, id));
+            case LAENGSVERKEHR -> laengsverkehr.add(toLaengsverkehr(option, id));
+            case QUERUNGSVERKEHR -> querungsverkehr.add(toQuerungsverkehr(option, id));
             }
         }
         dto.setVerkehrsbeziehungen(verkehrsbeziehungen);

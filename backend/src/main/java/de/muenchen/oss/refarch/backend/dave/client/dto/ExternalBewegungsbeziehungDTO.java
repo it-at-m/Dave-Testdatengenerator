@@ -4,7 +4,8 @@ import java.util.List;
 import lombok.Data;
 
 /**
- * Base type for a movement relation (Bewegungsbeziehung) in the external (service provider) contract.
+ * Base type for a movement relation (Bewegungsbeziehung) in the external (service provider)
+ * contract.
  */
 @Data
 public abstract class ExternalBewegungsbeziehungDTO {

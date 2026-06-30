@@ -30,7 +30,8 @@ public class TestdatenController {
     private final TestdatenService service;
 
     /**
-     * Returns the selection options (Zählarten, Zähldauern, Fahrzeugtypen, Himmelsrichtungen, Status) for the UI.
+     * Returns the selection options (Zählarten, Zähldauern, Fahrzeugtypen, Himmelsrichtungen, Status)
+     * for the UI.
      */
     @GetMapping("/options")
     public OptionsDTO getOptions() {
@@ -62,7 +63,8 @@ public class TestdatenController {
     }
 
     /**
-     * Generates the CSV test data for the configured Zählung and selected relations (one file per Knotenarm).
+     * Generates the CSV test data for the configured Zählung and selected relations (one file per
+     * Knotenarm).
      */
     @PostMapping("/csv")
     public GenerateCsvResponseDTO generiereCsv(@RequestBody final GenerateCsvRequestDTO request) {

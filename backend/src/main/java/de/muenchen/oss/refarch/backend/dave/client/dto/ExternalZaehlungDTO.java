@@ -8,7 +8,8 @@ import lombok.Data;
 
 /**
  * Body for {@code POST /zaehlung/saveExternal} and the elements returned by
- * {@code GET /zaehlung/getZaehlungenForExternal}. Mirrors the DAVe backend {@code ExternalZaehlungDTO}.
+ * {@code GET /zaehlung/getZaehlungenForExternal}. Mirrors the DAVe backend
+ * {@code ExternalZaehlungDTO}.
  * The movement-relation lists carry the persisted ids needed to attach the uploaded time intervals.
  */
 @Data

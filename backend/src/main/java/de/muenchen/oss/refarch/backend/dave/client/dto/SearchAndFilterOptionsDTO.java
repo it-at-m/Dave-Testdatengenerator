@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * Request body for the DAVe backend search endpoints ({@code POST /suggest}).
- * {@code messstelleVerkehrsart} contains values of the DAVe {@code Verkehrsart} enum (KFZ, RAD, UNBEKANNT).
+ * {@code messstelleVerkehrsart} contains values of the DAVe {@code Verkehrsart} enum (KFZ, RAD,
+ * UNBEKANNT).
  */
 @Data
 @NoArgsConstructor

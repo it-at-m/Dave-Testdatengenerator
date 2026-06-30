@@ -10,7 +10,8 @@ import java.util.List;
  * backend verifies {@code intervalCount * relations == storedIntervals} when a Zählung is set to
  * ACCOMPLISHED.
  *
- * <p>Interval {@code nummer} is 1-based over the whole day: interval n starts at {@code (n-1)*15}
+ * <p>
+ * Interval {@code nummer} is 1-based over the whole day: interval n starts at {@code (n-1)*15}
  * minutes after midnight.
  */
 public final class ZaehldauerIntervalle {
@@ -33,11 +34,11 @@ public final class ZaehldauerIntervalle {
      */
     public static List<Slot> slotsFor(final Zaehldauer zaehldauer) {
         return switch (zaehldauer) {
-            case DAUER_24_STUNDEN -> range(1, 96);
-            case DAUER_16_STUNDEN -> range(25, 88); // 06:00 - 22:00
-            case DAUER_13_STUNDEN -> range(25, 76); // 06:00 - 19:00
-            case DAUER_2_X_4_STUNDEN -> concat(range(25, 40), range(61, 76)); // 06-10 + 15-19
-            case SONSTIGE -> range(1, 96); // plausibility check is disabled for SONSTIGE
+        case DAUER_24_STUNDEN -> range(1, 96);
+        case DAUER_16_STUNDEN -> range(25, 88); // 06:00 - 22:00
+        case DAUER_13_STUNDEN -> range(25, 76); // 06:00 - 19:00
+        case DAUER_2_X_4_STUNDEN -> concat(range(25, 40), range(61, 76)); // 06-10 + 15-19
+        case SONSTIGE -> range(1, 96); // plausibility check is disabled for SONSTIGE
         };
     }
 

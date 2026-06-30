@@ -17,39 +17,41 @@ public final class RelationDiskriminator {
     private RelationDiskriminator() {
     }
 
-    /** The CSV {@code nach}/{@code Strassenseite}/{@code Richtung} discriminator columns of a relation. */
+    /**
+     * The CSV {@code nach}/{@code Strassenseite}/{@code Richtung} discriminator columns of a relation.
+     */
     public record CsvColumns(String nach, String strassenseite, String richtung) {
     }
 
     public static int ownerArm(final VerkehrsbeziehungOptionDTO option) {
         return switch (option.typ()) {
-            case VERKEHRSBEZIEHUNG -> isKreisverkehr(option) ? option.knotenarm() : option.von();
-            case LAENGSVERKEHR, QUERUNGSVERKEHR -> option.knotenarm();
+        case VERKEHRSBEZIEHUNG -> isKreisverkehr(option) ? option.knotenarm() : option.von();
+        case LAENGSVERKEHR, QUERUNGSVERKEHR -> option.knotenarm();
         };
     }
 
     public static CsvColumns csvColumns(final VerkehrsbeziehungOptionDTO option) {
         return switch (option.typ()) {
-            case VERKEHRSBEZIEHUNG -> isKreisverkehr(option)
-                    ? new CsvColumns(fahrbewegungToken(option.hinein(), option.heraus(), option.vorbei()), "", "")
-                    : new CsvColumns(String.valueOf(option.nach()), nullToEmpty(option.strassenseite()), "");
-            case LAENGSVERKEHR -> new CsvColumns("", nullToEmpty(option.strassenseite()), nullToEmpty(option.richtung()));
-            case QUERUNGSVERKEHR -> new CsvColumns("", "", nullToEmpty(option.richtung()));
+        case VERKEHRSBEZIEHUNG -> isKreisverkehr(option)
+                ? new CsvColumns(fahrbewegungToken(option.hinein(), option.heraus(), option.vorbei()), "", "")
+                : new CsvColumns(String.valueOf(option.nach()), nullToEmpty(option.strassenseite()), "");
+        case LAENGSVERKEHR -> new CsvColumns("", nullToEmpty(option.strassenseite()), nullToEmpty(option.richtung()));
+        case QUERUNGSVERKEHR -> new CsvColumns("", "", nullToEmpty(option.richtung()));
         };
     }
 
     public static String keyForOption(final VerkehrsbeziehungOptionDTO o) {
         return switch (o.typ()) {
-            case VERKEHRSBEZIEHUNG -> {
-                if (isKreisverkehr(o)) {
-                    yield kreisverkehrKey(o.knotenarm(), fahrbewegungToken(o.hinein(), o.heraus(), o.vorbei()));
-                }
-                yield isNotBlank(o.strassenseite())
-                        ? qjsKey(o.von(), o.nach(), o.strassenseite())
-                        : kreuzungKey(o.von(), o.nach());
+        case VERKEHRSBEZIEHUNG -> {
+            if (isKreisverkehr(o)) {
+                yield kreisverkehrKey(o.knotenarm(), fahrbewegungToken(o.hinein(), o.heraus(), o.vorbei()));
             }
-            case LAENGSVERKEHR -> laengsKey(o.knotenarm(), o.richtung(), o.strassenseite());
-            case QUERUNGSVERKEHR -> querungKey(o.knotenarm(), o.richtung());
+            yield isNotBlank(o.strassenseite())
+                    ? qjsKey(o.von(), o.nach(), o.strassenseite())
+                    : kreuzungKey(o.von(), o.nach());
+        }
+        case LAENGSVERKEHR -> laengsKey(o.knotenarm(), o.richtung(), o.strassenseite());
+        case QUERUNGSVERKEHR -> querungKey(o.knotenarm(), o.richtung());
         };
     }
 

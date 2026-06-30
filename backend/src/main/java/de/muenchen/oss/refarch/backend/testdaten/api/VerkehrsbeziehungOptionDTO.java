@@ -7,7 +7,8 @@ package de.muenchen.oss.refarch.backend.testdaten.api;
  * <li>VERKEHRSBEZIEHUNG (Kreuzung): {@code von}, {@code nach}</li>
  * <li>VERKEHRSBEZIEHUNG (Kreisverkehr): {@code knotenarm}, {@code hinein|heraus|vorbei}</li>
  * <li>VERKEHRSBEZIEHUNG (QJS): {@code von}, {@code nach}, {@code strassenseite}</li>
- * <li>LAENGSVERKEHR (FJS): {@code knotenarm}, {@code richtung} (EIN/AUS), {@code strassenseite}</li>
+ * <li>LAENGSVERKEHR (FJS): {@code knotenarm}, {@code richtung} (EIN/AUS),
+ * {@code strassenseite}</li>
  * <li>QUERUNGSVERKEHR (QU): {@code knotenarm}, {@code richtung} (Himmelsrichtung)</li>
  * </ul>
  * {@code key} is a stable identifier and {@code label} a human readable description for the UI.

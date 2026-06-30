@@ -29,8 +29,10 @@ public class BearbeiteZaehlungAssembler {
     private static final int DEFAULT_INTERVALL_MINUTEN = 15;
 
     /**
-     * @param idByOptionKey UUID to assign to each relation, keyed by {@link VerkehrsbeziehungOptionDTO#key()}.
-     *            The DAVe backend keeps relation ids we supply (it only generates one when the id is empty),
+     * @param idByOptionKey UUID to assign to each relation, keyed by
+     *            {@link VerkehrsbeziehungOptionDTO#key()}.
+     *            The DAVe backend keeps relation ids we supply (it only generates one when the id is
+     *            empty),
      *            so reusing these ids in the subsequent saveExternal call avoids a re-read round-trip.
      */
     public BearbeiteZaehlungDTO baue(final ZaehlungConfigDTO config, final List<VerkehrsbeziehungOptionDTO> beziehungen,
@@ -67,21 +69,21 @@ public class BearbeiteZaehlungAssembler {
         for (final VerkehrsbeziehungOptionDTO option : beziehungen) {
             final String id = idByOptionKey.get(option.key());
             switch (option.typ()) {
-                case VERKEHRSBEZIEHUNG -> {
-                    final BearbeiteVerkehrsbeziehungDTO vb = toVerkehrsbeziehung(option);
-                    vb.setId(id);
-                    verkehrsbeziehungen.add(vb);
-                }
-                case LAENGSVERKEHR -> {
-                    final BearbeiteLaengsverkehrDTO lv = toLaengsverkehr(option);
-                    lv.setId(id);
-                    laengsverkehr.add(lv);
-                }
-                case QUERUNGSVERKEHR -> {
-                    final BearbeiteQuerungsverkehrDTO qv = toQuerungsverkehr(option);
-                    qv.setId(id);
-                    querungsverkehr.add(qv);
-                }
+            case VERKEHRSBEZIEHUNG -> {
+                final BearbeiteVerkehrsbeziehungDTO vb = toVerkehrsbeziehung(option);
+                vb.setId(id);
+                verkehrsbeziehungen.add(vb);
+            }
+            case LAENGSVERKEHR -> {
+                final BearbeiteLaengsverkehrDTO lv = toLaengsverkehr(option);
+                lv.setId(id);
+                laengsverkehr.add(lv);
+            }
+            case QUERUNGSVERKEHR -> {
+                final BearbeiteQuerungsverkehrDTO qv = toQuerungsverkehr(option);
+                qv.setId(id);
+                querungsverkehr.add(qv);
+            }
             }
         }
         dto.setVerkehrsbeziehungen(verkehrsbeziehungen);

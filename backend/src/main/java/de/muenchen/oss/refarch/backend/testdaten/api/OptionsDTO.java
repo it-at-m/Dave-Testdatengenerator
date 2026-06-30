@@ -3,7 +3,8 @@ package de.muenchen.oss.refarch.backend.testdaten.api;
 import java.util.List;
 
 /**
- * Static selection options for the configuration UI (Zählarten, Zähldauern, Fahrzeugtypen, Himmelsrichtungen).
+ * Static selection options for the configuration UI (Zählarten, Zähldauern, Fahrzeugtypen,
+ * Himmelsrichtungen).
  */
 public record OptionsDTO(
         List<CodeLabel> zaehlarten,

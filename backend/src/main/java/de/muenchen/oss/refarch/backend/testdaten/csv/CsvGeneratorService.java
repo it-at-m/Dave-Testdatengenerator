@@ -161,10 +161,10 @@ public class CsvGeneratorService {
                     ? DEFAULT_WERT.getOrDefault(fahrzeug, 50)
                     : Math.max(0, spec.wert());
             return switch (modus) {
-                case KONSTANT -> basis;
-                case AUFSTEIGEND -> basis + intervallIndex;
-                case REALISTISCH -> (int) Math.round(basis * tagesgangFaktor(stunde));
-                case ZUFALL -> random.nextInt(basis + 1);
+            case KONSTANT -> basis;
+            case AUFSTEIGEND -> basis + intervallIndex;
+            case REALISTISCH -> (int) Math.round(basis * tagesgangFaktor(stunde));
+            case ZUFALL -> random.nextInt(basis + 1);
             };
         }
 
@@ -174,23 +174,23 @@ public class CsvGeneratorService {
          */
         private static double tagesgangFaktor(final int stunde) {
             return switch (stunde) {
-                case 6 -> 0.5;
-                case 7 -> 0.85;
-                case 8 -> 1.0;
-                case 9 -> 0.7;
-                case 10, 11 -> 0.5;
-                case 12 -> 0.55;
-                case 13, 14 -> 0.5;
-                case 15 -> 0.65;
-                case 16 -> 0.85;
-                case 17 -> 1.0;
-                case 18 -> 0.8;
-                case 19 -> 0.6;
-                case 20 -> 0.4;
-                case 21 -> 0.3;
-                case 22 -> 0.2;
-                case 5 -> 0.2;
-                default -> 0.05; // 23:00 - 04:00 (Nacht)
+            case 6 -> 0.5;
+            case 7 -> 0.85;
+            case 8 -> 1.0;
+            case 9 -> 0.7;
+            case 10, 11 -> 0.5;
+            case 12 -> 0.55;
+            case 13, 14 -> 0.5;
+            case 15 -> 0.65;
+            case 16 -> 0.85;
+            case 17 -> 1.0;
+            case 18 -> 0.8;
+            case 19 -> 0.6;
+            case 20 -> 0.4;
+            case 21 -> 0.3;
+            case 22 -> 0.2;
+            case 5 -> 0.2;
+            default -> 0.05; // 23:00 - 04:00 (Nacht)
             };
         }
     }

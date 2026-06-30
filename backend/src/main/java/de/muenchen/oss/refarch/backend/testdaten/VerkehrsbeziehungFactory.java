@@ -23,10 +23,10 @@ public class VerkehrsbeziehungFactory {
         final Zaehlart zaehlart = Zaehlart.valueOf(zaehlartName);
         final List<Integer> arme = knotenarme.stream().map(KnotenarmDTO::nummer).sorted().toList();
         return switch (zaehlart) {
-            case FJS -> laengsverkehr(arme);
-            case QU -> querungsverkehr(arme);
-            case QJS -> querschnittJeStrassenseite(arme);
-            default -> kreisverkehr ? kreisverkehr(arme) : kreuzung(arme);
+        case FJS -> laengsverkehr(arme);
+        case QU -> querungsverkehr(arme);
+        case QJS -> querschnittJeStrassenseite(arme);
+        default -> kreisverkehr ? kreisverkehr(arme) : kreuzung(arme);
         };
     }
 
@@ -123,11 +123,11 @@ public class VerkehrsbeziehungFactory {
      */
     private List<Himmelsrichtung> strassenseitenFuerArm(final int arm) {
         return switch (arm) {
-            case 2, 4 -> List.of(Himmelsrichtung.N, Himmelsrichtung.S);
-            case 5, 7 -> List.of(Himmelsrichtung.SO, Himmelsrichtung.NW);
-            case 6, 8 -> List.of(Himmelsrichtung.NO, Himmelsrichtung.SW);
-            // Arm 1/3 sowie alle nicht abgedeckten (ungeraden) Arme: Ost-West-Achse.
-            default -> List.of(Himmelsrichtung.O, Himmelsrichtung.W);
+        case 2, 4 -> List.of(Himmelsrichtung.N, Himmelsrichtung.S);
+        case 5, 7 -> List.of(Himmelsrichtung.SO, Himmelsrichtung.NW);
+        case 6, 8 -> List.of(Himmelsrichtung.NO, Himmelsrichtung.SW);
+        // Arm 1/3 sowie alle nicht abgedeckten (ungeraden) Arme: Ost-West-Achse.
+        default -> List.of(Himmelsrichtung.O, Himmelsrichtung.W);
         };
     }
 }
