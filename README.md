@@ -58,13 +58,13 @@ damit das Frontend das Backend lokal ohne Keycloak ansprechen kann. **Nicht in P
 ## Starten (lokal)
 
 1. **dave-backend** lokal starten (z. B. `runLocalNoSecurity`), passende `base-url` setzen.
-2. **Backend** (Port 8087):
-   ```
-   cd backend
-   mvn spring-boot:run -Dspring-boot.run.profiles=local
-   ```
-   (Während der Entwicklung können die strengen Lints übersprungen werden:
-   `-Dspotless.check.skip=true -Dpmd.skip=true -Dcpd.skip=true -Dspotbugs.skip=true`.)
+   2. **Backend** (Port 8087):
+      ```
+      cd backend
+      mvn spring-boot:run -Dspring-boot.run.profiles=local
+      ```
+      (Während der Entwicklung können die strengen Lints übersprungen werden:
+      `-Dspotless.check.skip=true -Dpmd.skip=true -Dcpd.skip=true -Dspotbugs.skip=true`.)
 3. **Frontend** (Port 8088, Vite-Proxy `/api/backend` → `http://localhost:8087`):
    ```
    cd frontend
@@ -86,6 +86,7 @@ ersten Einsatz daher bitte diese Gates ausführen:
 
 - Backend kompilieren:
   `mvn -DskipTests -Dspotless.check.skip=true -Dpmd.skip=true -Dcpd.skip=true -Dspotbugs.skip=true compile`
+  `mvn clean install "-Dspotless.check.skip=true" "-Dpmd.skip=true" "-Dcpd.skip=true" "-Dspotbugs.skip=true"`
 - Frontend typprüfen (nur das deckt TS-Fehler auf – `npm run dev` prüft keine Typen):
   `npx vue-tsc --noEmit -p tsconfig.app.json`
 
