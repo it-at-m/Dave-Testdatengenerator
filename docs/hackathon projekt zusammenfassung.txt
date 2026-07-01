@@ -1,0 +1,7 @@
+Dave-Testdatengenerator: Mit Claude Code konnten wir ausprobieren, wie gut es funktioniert, 
+eine komplett neue Anwendung aufzubauen, wobei bestimmte Voraussetzungen gegeben waren. Die App die entwickelt wurde, sollte mindestens 
+korrekte CSV-Dateien nach einem bestimmten Schema und einer Fachlichkeit erstellen, wobei Dokumentation in github und in den Code-Repos zu finden war.
+Zusätzlich sollten die Testdaten auch direkt ins Dave-Backend eingespielt werden können, um den Workflow des Anlegens und Hochladens in der Oberfläche abzunehmen. 
+Dafür musste Claude den kompletten Dave-Stack hochfahren und die API und den Workflow verstehen.
+Als Ergebnis kamen technisch funktionierende Anwendungen heraus, die grundsätzlich für die CSV-Testdatengenerierung genutzt werden können. Teilweise sind
+noch Nachbesserungen im Hinblick auf Fachlichkeit und direktes Einspielen nötig - was für Claude Code sicherlich machbar ist - wofür aber der zeitliche Rahmen des Hackathons dann zu kurz war.
