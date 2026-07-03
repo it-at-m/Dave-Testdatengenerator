@@ -12,61 +12,61 @@
       <!-- Step 1: Zählstelle -->
       <template #item.1>
         <v-card flat>
-          <v-alert
-            type="info"
-            variant="tonal"
-            density="compact"
-            class="mb-4"
-          >
-            {{ t("views.testdaten.zaehlstelle.hinweis") }}
-          </v-alert>
+<!--          <v-alert-->
+<!--            type="info"-->
+<!--            variant="tonal"-->
+<!--            density="compact"-->
+<!--            class="mb-4"-->
+<!--          >-->
+<!--            {{ t("views.testdaten.zaehlstelle.hinweis") }}-->
+<!--          </v-alert>-->
 
           <!-- Optional: search via dave-backend (requires a running backend) -->
-          <div class="text-subtitle-2 mb-1">
-            {{ t("views.testdaten.zaehlstelle.sucheTitel") }}
-          </div>
-          <div class="d-flex ga-2 align-center mb-2">
-            <v-text-field
-              v-model="suchbegriff"
-              :label="t('views.testdaten.zaehlstelle.searchLabel')"
-              density="comfortable"
-              hide-details
-              clearable
-              @keyup.enter="onSearch"
-            />
-            <v-btn
-              color="primary"
-              :loading="store.loading"
-              @click="onSearch"
-            >
-              {{ t("common.actions.search") }}
-            </v-btn>
-          </div>
+<!--          <div class="text-subtitle-2 mb-1">-->
+<!--            {{ t("views.testdaten.zaehlstelle.sucheTitel") }}-->
+<!--          </div>-->
+<!--          <div class="d-flex ga-2 align-center mb-2">-->
+<!--            <v-text-field-->
+<!--              v-model="suchbegriff"-->
+<!--              :label="t('views.testdaten.zaehlstelle.searchLabel')"-->
+<!--              density="comfortable"-->
+<!--              hide-details-->
+<!--              clearable-->
+<!--              @keyup.enter="onSearch"-->
+<!--            />-->
+<!--            <v-btn-->
+<!--              color="primary"-->
+<!--              :loading="store.loading"-->
+<!--              @click="onSearch"-->
+<!--            >-->
+<!--              {{ t("common.actions.search") }}-->
+<!--            </v-btn>-->
+<!--          </div>-->
 
-          <v-list
-            v-if="store.suggestions.length"
-            density="compact"
-            border
-            rounded
-          >
-            <v-list-item
-              v-for="s in store.suggestions"
-              :key="s.id"
-              :title="s.text"
-              :active="store.config.zaehlstelleId === s.id"
-              @click="store.selectZaehlstelle(s.id)"
-            />
-          </v-list>
-          <v-alert
-            v-else-if="sucheAusgefuehrt"
-            type="info"
-            variant="tonal"
-            density="compact"
-          >
-            {{ t("views.testdaten.zaehlstelle.noResults") }}
-          </v-alert>
+<!--          <v-list-->
+<!--            v-if="store.suggestions.length"-->
+<!--            density="compact"-->
+<!--            border-->
+<!--            rounded-->
+<!--          >-->
+<!--            <v-list-item-->
+<!--              v-for="s in store.suggestions"-->
+<!--              :key="s.id"-->
+<!--              :title="s.text"-->
+<!--              :active="store.config.zaehlstelleId === s.id"-->
+<!--              @click="store.selectZaehlstelle(s.id)"-->
+<!--            />-->
+<!--          </v-list>-->
+<!--          <v-alert-->
+<!--            v-else-if="sucheAusgefuehrt"-->
+<!--            type="info"-->
+<!--            variant="tonal"-->
+<!--            density="compact"-->
+<!--          >-->
+<!--            {{ t("views.testdaten.zaehlstelle.noResults") }}-->
+<!--          </v-alert>-->
 
-          <v-divider class="my-4" />
+<!--          <v-divider class="my-4" />-->
 
           <!-- Manual entry: works fully offline up to CSV generation -->
           <div class="text-subtitle-2 mb-2">
@@ -96,45 +96,45 @@
             </v-col>
           </v-row>
 
-          <v-expansion-panels class="mt-2">
-            <v-expansion-panel
-              :title="t('views.testdaten.zaehlstelle.importFelder')"
-            >
-              <v-expansion-panel-text>
-                <v-row dense>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="store.config.zaehlstelleId"
-                      :label="t('views.testdaten.zaehlstelle.id')"
-                      density="compact"
-                    />
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    md="6"
-                  >
-                    <v-text-field
-                      v-model.number="store.config.lat"
-                      type="number"
-                      :label="t('views.testdaten.zaehlstelle.lat')"
-                      density="compact"
-                    />
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    md="6"
-                  >
-                    <v-text-field
-                      v-model.number="store.config.lng"
-                      type="number"
-                      :label="t('views.testdaten.zaehlstelle.lng')"
-                      density="compact"
-                    />
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-text>
-            </v-expansion-panel>
-          </v-expansion-panels>
+<!--          <v-expansion-panels class="mt-2">-->
+<!--            <v-expansion-panel-->
+<!--              :title="t('views.testdaten.zaehlstelle.importFelder')"-->
+<!--            >-->
+<!--              <v-expansion-panel-text>-->
+<!--                <v-row dense>-->
+<!--                  <v-col cols="12">-->
+<!--                    <v-text-field-->
+<!--                      v-model="store.config.zaehlstelleId"-->
+<!--                      :label="t('views.testdaten.zaehlstelle.id')"-->
+<!--                      density="compact"-->
+<!--                    />-->
+<!--                  </v-col>-->
+<!--                  <v-col-->
+<!--                    cols="12"-->
+<!--                    md="6"-->
+<!--                  >-->
+<!--                    <v-text-field-->
+<!--                      v-model.number="store.config.lat"-->
+<!--                      type="number"-->
+<!--                      :label="t('views.testdaten.zaehlstelle.lat')"-->
+<!--                      density="compact"-->
+<!--                    />-->
+<!--                  </v-col>-->
+<!--                  <v-col-->
+<!--                    cols="12"-->
+<!--                    md="6"-->
+<!--                  >-->
+<!--                    <v-text-field-->
+<!--                      v-model.number="store.config.lng"-->
+<!--                      type="number"-->
+<!--                      :label="t('views.testdaten.zaehlstelle.lng')"-->
+<!--                      density="compact"-->
+<!--                    />-->
+<!--                  </v-col>-->
+<!--                </v-row>-->
+<!--              </v-expansion-panel-text>-->
+<!--            </v-expansion-panel>-->
+<!--          </v-expansion-panels>-->
 
           <div class="d-flex justify-end mt-4">
             <v-btn
@@ -222,48 +222,48 @@
                 :label="t('views.testdaten.konfiguration.sonderzaehlung')"
               />
             </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-text-field
-                v-model="store.config.kreuzungsname"
-                :label="t('views.testdaten.konfiguration.kreuzungsname')"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-text-field
-                v-model="store.config.dienstleisterkennung"
-                :label="t('views.testdaten.konfiguration.dienstleisterkennung')"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-text-field
-                v-model="store.config.projektNummer"
-                :label="t('views.testdaten.konfiguration.projektNummer')"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-text-field
-                v-model="store.config.projektName"
-                :label="t('views.testdaten.konfiguration.projektName')"
-              />
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                v-model="store.config.kommentar"
-                :label="t('views.testdaten.konfiguration.kommentar')"
-              />
-            </v-col>
+<!--            <v-col-->
+<!--              cols="12"-->
+<!--              md="6"-->
+<!--            >-->
+<!--              <v-text-field-->
+<!--                v-model="store.config.kreuzungsname"-->
+<!--                :label="t('views.testdaten.konfiguration.kreuzungsname')"-->
+<!--              />-->
+<!--            </v-col>-->
+<!--            <v-col-->
+<!--              cols="12"-->
+<!--              md="6"-->
+<!--            >-->
+<!--              <v-text-field-->
+<!--                v-model="store.config.dienstleisterkennung"-->
+<!--                :label="t('views.testdaten.konfiguration.dienstleisterkennung')"-->
+<!--              />-->
+<!--            </v-col>-->
+<!--            <v-col-->
+<!--              cols="12"-->
+<!--              md="6"-->
+<!--            >-->
+<!--              <v-text-field-->
+<!--                v-model="store.config.projektNummer"-->
+<!--                :label="t('views.testdaten.konfiguration.projektNummer')"-->
+<!--              />-->
+<!--            </v-col>-->
+<!--            <v-col-->
+<!--              cols="12"-->
+<!--              md="6"-->
+<!--            >-->
+<!--              <v-text-field-->
+<!--                v-model="store.config.projektName"-->
+<!--                :label="t('views.testdaten.konfiguration.projektName')"-->
+<!--              />-->
+<!--            </v-col>-->
+<!--            <v-col cols="12">-->
+<!--              <v-text-field-->
+<!--                v-model="store.config.kommentar"-->
+<!--                :label="t('views.testdaten.konfiguration.kommentar')"-->
+<!--              />-->
+<!--            </v-col>-->
           </v-row>
 
           <v-divider class="my-3" />
@@ -510,102 +510,102 @@
             >
               {{ t("common.actions.back") }}
             </v-btn>
-            <v-btn
-              color="primary"
-              :disabled="!store.csvDateien.length"
-              @click="store.step = 5"
-            >
-              {{ t("common.actions.next") }}
-            </v-btn>
+<!--            <v-btn-->
+<!--              color="primary"-->
+<!--              :disabled="!store.csvDateien.length"-->
+<!--              @click="store.step = 5"-->
+<!--            >-->
+<!--              {{ t("common.actions.next") }}-->
+<!--            </v-btn>-->
           </div>
         </v-card>
       </template>
 
-      <!-- Step 5: Import -->
-      <template #item.5>
-        <v-card flat>
-          <v-alert
-            type="info"
-            variant="tonal"
-            density="compact"
-            class="mb-3"
-          >
-            {{ t("views.testdaten.import.hinweis") }}
-          </v-alert>
-          <v-alert
-            v-if="!hatZaehlstelleId"
-            type="warning"
-            variant="tonal"
-            density="compact"
-            class="mb-3"
-          >
-            {{ t("views.testdaten.import.fehlendeId") }}
-          </v-alert>
+<!--      &lt;!&ndash; Step 5: Import &ndash;&gt;-->
+<!--      <template #item.5>-->
+<!--        <v-card flat>-->
+<!--          <v-alert-->
+<!--            type="info"-->
+<!--            variant="tonal"-->
+<!--            density="compact"-->
+<!--            class="mb-3"-->
+<!--          >-->
+<!--            {{ t("views.testdaten.import.hinweis") }}-->
+<!--          </v-alert>-->
+<!--          <v-alert-->
+<!--            v-if="!hatZaehlstelleId"-->
+<!--            type="warning"-->
+<!--            variant="tonal"-->
+<!--            density="compact"-->
+<!--            class="mb-3"-->
+<!--          >-->
+<!--            {{ t("views.testdaten.import.fehlendeId") }}-->
+<!--          </v-alert>-->
 
-          <v-select
-            v-model="store.zielStatus"
-            :items="store.options?.statusWerte ?? []"
-            :label="t('views.testdaten.import.zielStatus')"
-            style="max-width: 320px"
-          />
-          <v-btn
-            color="primary"
-            :loading="store.loading"
-            :disabled="!hatZaehlstelleId"
-            class="mb-4"
-            @click="store.doImport"
-          >
-            {{ t("views.testdaten.import.starten") }}
-          </v-btn>
+<!--          <v-select-->
+<!--            v-model="store.zielStatus"-->
+<!--            :items="store.options?.statusWerte ?? []"-->
+<!--            :label="t('views.testdaten.import.zielStatus')"-->
+<!--            style="max-width: 320px"-->
+<!--          />-->
+<!--          <v-btn-->
+<!--            color="primary"-->
+<!--            :loading="store.loading"-->
+<!--            :disabled="!hatZaehlstelleId"-->
+<!--            class="mb-4"-->
+<!--            @click="store.doImport"-->
+<!--          >-->
+<!--            {{ t("views.testdaten.import.starten") }}-->
+<!--          </v-btn>-->
 
-          <v-alert
-            v-if="store.importResult"
-            :type="store.importResult.success ? 'success' : 'error'"
-            variant="tonal"
-            class="mb-3"
-          >
-            <div>
-              {{
-                store.importResult.success
-                  ? t("views.testdaten.import.erfolg")
-                  : t("views.testdaten.import.fehler")
-              }}
-            </div>
-            <div v-if="store.importResult.zaehlungId">
-              {{ t("views.testdaten.import.zaehlungId") }}:
-              {{ store.importResult.zaehlungId }}
-            </div>
-          </v-alert>
+<!--          <v-alert-->
+<!--            v-if="store.importResult"-->
+<!--            :type="store.importResult.success ? 'success' : 'error'"-->
+<!--            variant="tonal"-->
+<!--            class="mb-3"-->
+<!--          >-->
+<!--            <div>-->
+<!--              {{-->
+<!--                store.importResult.success-->
+<!--                  ? t("views.testdaten.import.erfolg")-->
+<!--                  : t("views.testdaten.import.fehler")-->
+<!--              }}-->
+<!--            </div>-->
+<!--            <div v-if="store.importResult.zaehlungId">-->
+<!--              {{ t("views.testdaten.import.zaehlungId") }}:-->
+<!--              {{ store.importResult.zaehlungId }}-->
+<!--            </div>-->
+<!--          </v-alert>-->
 
-          <template v-if="store.importResult?.steps?.length">
-            <div class="text-subtitle-2">
-              {{ t("views.testdaten.import.schritte") }}
-            </div>
-            <v-list density="compact">
-              <v-list-item
-                v-for="(s, i) in store.importResult.steps"
-                :key="i"
-                :title="s"
-              />
-            </v-list>
-          </template>
+<!--          <template v-if="store.importResult?.steps?.length">-->
+<!--            <div class="text-subtitle-2">-->
+<!--              {{ t("views.testdaten.import.schritte") }}-->
+<!--            </div>-->
+<!--            <v-list density="compact">-->
+<!--              <v-list-item-->
+<!--                v-for="(s, i) in store.importResult.steps"-->
+<!--                :key="i"-->
+<!--                :title="s"-->
+<!--              />-->
+<!--            </v-list>-->
+<!--          </template>-->
 
-          <div class="d-flex justify-space-between mt-4">
-            <v-btn
-              variant="text"
-              @click="store.step = 4"
-            >
-              {{ t("common.actions.back") }}
-            </v-btn>
-            <v-btn
-              variant="tonal"
-              @click="store.reset"
-            >
-              {{ t("common.actions.reset") }}
-            </v-btn>
-          </div>
-        </v-card>
-      </template>
+<!--          <div class="d-flex justify-space-between mt-4">-->
+<!--            <v-btn-->
+<!--              variant="text"-->
+<!--              @click="store.step = 4"-->
+<!--            >-->
+<!--              {{ t("common.actions.back") }}-->
+<!--            </v-btn>-->
+<!--            <v-btn-->
+<!--              variant="tonal"-->
+<!--              @click="store.reset"-->
+<!--            >-->
+<!--              {{ t("common.actions.reset") }}-->
+<!--            </v-btn>-->
+<!--          </div>-->
+<!--        </v-card>-->
+<!--      </template>-->
     </v-stepper>
   </v-container>
 </template>
@@ -629,7 +629,7 @@ const stepTitles = computed(() => [
   t("views.testdaten.steps.konfiguration"),
   t("views.testdaten.steps.beziehungen"),
   t("views.testdaten.steps.csv"),
-  t("views.testdaten.steps.import"),
+//  t("views.testdaten.steps.import"),
 ]);
 
 const VERTEILUNGSMODI = [
