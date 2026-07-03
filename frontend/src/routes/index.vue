@@ -97,7 +97,9 @@
           </v-row>
 
           <v-expansion-panels class="mt-2">
-            <v-expansion-panel :title="t('views.testdaten.zaehlstelle.importFelder')">
+            <v-expansion-panel
+              :title="t('views.testdaten.zaehlstelle.importFelder')"
+            >
               <v-expansion-panel-text>
                 <v-row dense>
                   <v-col cols="12">
@@ -150,7 +152,10 @@
       <template #item.2>
         <v-card flat>
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-select
                 v-model="store.config.zaehlart"
                 :items="store.options?.zaehlarten ?? []"
@@ -159,7 +164,10 @@
                 :label="t('views.testdaten.konfiguration.zaehlart')"
               />
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-select
                 v-model="store.config.zaehldauer"
                 :items="store.options?.zaehldauern ?? []"
@@ -170,14 +178,20 @@
                 persistent-hint
               />
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-text-field
                 v-model="store.config.datum"
                 type="date"
                 :label="t('views.testdaten.konfiguration.datum')"
               />
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-select
                 v-model="store.config.kategorien"
                 :items="store.options?.fahrzeuge ?? []"
@@ -188,39 +202,57 @@
                 chips
               />
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-switch
                 v-model="store.config.kreisverkehr"
                 color="primary"
                 :label="t('views.testdaten.konfiguration.kreisverkehr')"
               />
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-switch
                 v-model="store.config.sonderzaehlung"
                 color="primary"
                 :label="t('views.testdaten.konfiguration.sonderzaehlung')"
               />
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-text-field
                 v-model="store.config.kreuzungsname"
                 :label="t('views.testdaten.konfiguration.kreuzungsname')"
               />
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-text-field
                 v-model="store.config.dienstleisterkennung"
                 :label="t('views.testdaten.konfiguration.dienstleisterkennung')"
               />
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-text-field
                 v-model="store.config.projektNummer"
                 :label="t('views.testdaten.konfiguration.projektNummer')"
               />
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-text-field
                 v-model="store.config.projektName"
                 :label="t('views.testdaten.konfiguration.projektName')"
@@ -390,7 +422,11 @@
                 v-model="eintrag.gen.modus"
                 :items="generierungModi"
                 :label="t('views.testdaten.csv.datengenerierung.modus')"
-                :hint="t(`views.testdaten.csv.datengenerierung.hint.${eintrag.gen.modus}`)"
+                :hint="
+                  t(
+                    `views.testdaten.csv.datengenerierung.hint.${eintrag.gen.modus}`
+                  )
+                "
                 persistent-hint
                 density="compact"
               />
@@ -621,9 +657,7 @@ const generierbareEintraege = computed(() =>
 );
 
 function fahrzeugLabel(code: string): string {
-  return (
-    store.options?.fahrzeuge.find((f) => f.code === code)?.label ?? code
-  );
+  return store.options?.fahrzeuge.find((f) => f.code === code)?.label ?? code;
 }
 
 const intervallHint = computed(() => {

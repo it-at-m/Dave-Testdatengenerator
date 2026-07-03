@@ -29,7 +29,11 @@ function getJson<T>(url: string, errorMessage: string): Promise<T> {
     });
 }
 
-function postJson<T>(url: string, body: unknown, errorMessage: string): Promise<T> {
+function postJson<T>(
+  url: string,
+  body: unknown,
+  errorMessage: string
+): Promise<T> {
   return fetch(url, postConfig(body))
     .catch(defaultCatchHandler)
     .then((response) => {
@@ -39,10 +43,15 @@ function postJson<T>(url: string, body: unknown, errorMessage: string): Promise<
 }
 
 export function getOptions(): Promise<OptionsResponse> {
-  return getJson(`${BASE}/options`, "Die Auswahloptionen konnten nicht geladen werden.");
+  return getJson(
+    `${BASE}/options`,
+    "Die Auswahloptionen konnten nicht geladen werden."
+  );
 }
 
-export function suggestZaehlstellen(query: string): Promise<ZaehlstelleSuggest[]> {
+export function suggestZaehlstellen(
+  query: string
+): Promise<ZaehlstelleSuggest[]> {
   return getJson(
     `${BASE}/zaehlstellen/suggest?query=${encodeURIComponent(query)}`,
     "Die Suche nach Zählstellen ist fehlgeschlagen."
@@ -69,9 +78,17 @@ export function getVerkehrsbeziehungen(
 export function generateCsv(
   request: GenerateCsvRequest
 ): Promise<GenerateCsvResponse> {
-  return postJson(`${BASE}/csv`, request, "Die CSV-Daten konnten nicht erzeugt werden.");
+  return postJson(
+    `${BASE}/csv`,
+    request,
+    "Die CSV-Daten konnten nicht erzeugt werden."
+  );
 }
 
 export function importTestdaten(request: ImportRequest): Promise<ImportResult> {
-  return postJson(`${BASE}/import`, request, "Der Import der Testdaten ist fehlgeschlagen.");
+  return postJson(
+    `${BASE}/import`,
+    request,
+    "Der Import der Testdaten ist fehlgeschlagen."
+  );
 }

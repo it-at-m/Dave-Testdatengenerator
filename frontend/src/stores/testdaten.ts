@@ -13,6 +13,7 @@ import type {
 import { defineStore } from "pinia";
 import { computed, ref, watch } from "vue";
 
+import { ApiError } from "@/api/ApiError";
 import {
   generateCsv,
   getOptions,
@@ -21,7 +22,6 @@ import {
   importTestdaten,
   suggestZaehlstellen,
 } from "@/api/testdaten-client";
-import { ApiError } from "@/api/ApiError";
 import { STATUS_INDICATORS } from "@/constants";
 import { useSnackbarStore } from "@/stores/snackbar";
 
@@ -151,7 +151,7 @@ export const useTestdatenStore = defineStore("testdaten", () => {
     const message =
       error instanceof ApiError
         ? error.message
-        : (error as Error)?.message ?? "Unbekannter Fehler.";
+        : ((error as Error)?.message ?? "Unbekannter Fehler.");
     snackbarStore.push({ color: STATUS_INDICATORS.ERROR, text: message });
   }
 

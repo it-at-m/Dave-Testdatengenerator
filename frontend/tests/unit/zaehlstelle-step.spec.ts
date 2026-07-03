@@ -3,6 +3,11 @@ import { mount } from "@vue/test-utils";
 import { beforeAll, describe, expect, test, vi } from "vitest";
 import { nextTick } from "vue";
 
+import i18n from "@/plugins/i18n";
+import vuetify from "@/plugins/vuetify";
+import IndexView from "@/routes/index.vue";
+import { useTestdatenStore } from "@/stores/testdaten";
+
 // Mount the wizard fully offline: stub the API client so no dave-backend is required.
 vi.mock("@/api/testdaten-client", () => ({
   getOptions: vi.fn().mockResolvedValue({
@@ -20,11 +25,6 @@ vi.mock("@/api/testdaten-client", () => ({
   generateCsv: vi.fn(),
   importTestdaten: vi.fn(),
 }));
-
-import i18n from "@/plugins/i18n";
-import vuetify from "@/plugins/vuetify";
-import IndexView from "@/routes/index.vue";
-import { useTestdatenStore } from "@/stores/testdaten";
 
 beforeAll(() => {
   // Vuetify touches these browser APIs that jsdom does not implement.
