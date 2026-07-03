@@ -27,7 +27,7 @@ management:
 # Enable swagger-ui locally (also used as source for the OpenAPI spec generation)
 springdoc:
   swagger-ui:
-    enabled: true
+    enabled: false
   api-docs:
     enabled: true
 
