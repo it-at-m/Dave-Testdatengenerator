@@ -11,21 +11,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Fahrzeug {
 
-    // Kategorien
-    KFZ("Kfz"),
-    SV("Schwerverkehr"),
-    GV("Güterverkehr"),
-    SV_P("Schwerverkehrsanteil"),
-    GV_P("Güterverkehrsanteil"),
-    // Klassen
     PKW("Pkw"),
     LKW("Lkw"),
     LZ("Lastzug"),
     BUS("Bus"),
     KRAD("Kraftrad"),
     RAD("Rad"),
-    FUSS("Fuß"),
-    PKW_EINHEIT("Pkw-Einheiten");
+    FUSS("Fuß");
 
     private final String bezeichnung;
 
