@@ -35,17 +35,17 @@ const FUSS_RAD_ZAEHLARTEN = ["QU", "FJS", "QJS"];
 function defaultKategorienFor(zaehlart: string): string[] {
   return FUSS_RAD_ZAEHLARTEN.includes(zaehlart)
     ? ["RAD", "FUSS"]
-    : ["PKW", "LKW", "LZ", "BUS", "KRAD", "RAD"];
+    : ["PKW", "LKW", "LZ", "BUS", "KRAD", "RAD", "FUSS"];
 }
 
 /**
- * Knotenarm-Vorbelegung je Zählart. Bei einer Querung (QU) wird immer über zwei
+ * Knotenarm-Vorbelegung je Zählart. Bei einer Querung je Straßenseite (QJS) wird immer über zwei
  * gegenüberliegende Knotenarme gezählt, daher werden zwei (z.B. 2 und 4) vorbelegt.
  * Gegenüberliegende Arme laut Belastungsplan: 1↔3, 2↔4, 5↔7, 6↔8.
  * Sonst genügt ein einzelner Arm; weitere bleiben hinzufügbar.
  */
 function defaultKnotenarmeFor(zaehlart: string): Knotenarm[] {
-  return zaehlart === "QU"
+  return zaehlart === "QJS"
     ? [
         { nummer: 2, strassenname: "Arm 2" },
         { nummer: 4, strassenname: "Arm 4" },
@@ -84,7 +84,7 @@ function defaultConfig(): ZaehlungConfig {
     lng: null,
     datum: new Date().toISOString().slice(0, 10),
     zaehlart,
-    zaehldauer: "DAUER_2_X_4_STUNDEN",
+    zaehldauer: "DAUER_24_STUNDEN",
     zaehlIntervall: 15,
     kreisverkehr: false,
     sonderzaehlung: false,
