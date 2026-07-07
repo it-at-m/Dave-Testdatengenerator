@@ -1,11 +1,12 @@
-# DAVe Testdaten-Generator
+# DRAFT DAVe Testdaten-Generator
 
 Werkzeug zur Generierung und Einspielung von **Testdaten (Zählungen)** in das
 [dave-backend](https://github.com/it-at-m/dave-backend). Aufgebaut auf der
 it@M-Referenzarchitektur ([refarch-templates](https://github.com/it-at-m/refarch-templates)):
-Vue-3-Frontend + Spring-Boot-Backend (BFF).
+Vue-3-Frontend + Spring-Boot-Backend
 
 ## Was macht die Anwendung?
+!!! Achtung: Die Interaktion mit dem Backend ist noch nicht verifiziert. Bitte nur die CSV-Datengenerierung nutzen. (Branch only-csv) !!!
 
 Ein Assistent (Stepper) führt durch:
 
@@ -30,7 +31,7 @@ erfüllt ist.
 ## Voraussetzungen
 
 - Java 21+ und Maven (oder Build über die IDE)
-- Node `>=24.11 <25` und npm `>=11.6 <12`
+- Node `>=22` und npm `>=11.6 <12`
 - Ein erreichbares **dave-backend** (lokal am einfachsten via `runLocalNoSecurity`) – **nur** für
   die Zählstellensuche und das Einspielen. Für Konfiguration, Verkehrsbeziehungen und
   CSV-Erzeugung wird kein dave-backend benötigt.
@@ -57,7 +58,7 @@ damit das Frontend das Backend lokal ohne Keycloak ansprechen kann. **Nicht in P
 
 ## Starten (lokal)
 
-1. **dave-backend** lokal starten (z. B. `runLocalNoSecurity`), passende `base-url` setzen.
+1. **dave-backend** lokal starten (wenn gewünscht andere `base-url` setzen)
    2. **Backend** (Port 8087):
       ```
       cd backend
@@ -78,19 +79,16 @@ handgeschriebenen fetch-Client (`src/api/testdaten-client.ts`). Für einen Produ
 (`npm run build`) wird – wie im refarch-Template – die OpenAPI-Spec benötigt:
 Backend starten und `mvn springdoc-openapi:generate` ausführen, danach `npm run pre-build`.
 
-## Status & Verifikation
-
-Der Code ist vollständig implementiert, wurde aber in der Entstehungsumgebung **noch nicht
-kompiliert, typgeprüft oder ausgeführt** (dort waren weder Maven noch Node verfügbar). Vor dem
-ersten Einsatz daher bitte diese Gates ausführen:
+## Kompilieren & Prüfen
 
 - Backend kompilieren:
-  `mvn -DskipTests -Dspotless.check.skip=true -Dpmd.skip=true -Dcpd.skip=true -Dspotbugs.skip=true compile`
-  `mvn clean install "-Dspotless.check.skip=true" "-Dpmd.skip=true" "-Dcpd.skip=true" "-Dspotbugs.skip=true"`
+  `mvn -DskipTests "-Dspotless.check.skip=true" "-Dpmd.skip=true" "-Dcpd.skip=true" "-Dspotbugs.skip=true" compile`
 - Frontend typprüfen (nur das deckt TS-Fehler auf – `npm run dev` prüft keine Typen):
   `npx vue-tsc --noEmit -p tsconfig.app.json`
 
-Gegen ein laufendes dave-backend zu prüfen (erst dann belastbar):
+!!! Die Anbingung an ein laufendes Dave-Backend wurde noch nicht verifiziert.  !!!
+
+Gegen ein laufendes dave-backend noch zu prüfen:
 
 - Die Anlege-Endpunkte (`/zaehlung/save`) verlangen serverseitig die Rolle **FACHADMIN**.
   Sicherstellen, dass der gewählte Auth-Modus (`none` gegen `runLocalNoSecurity`, sonst OAuth2)
