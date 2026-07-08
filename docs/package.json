@@ -12,7 +12,7 @@
   "license": "MIT",
   "engines": {
     "node": ">=22 <25",
-    "npm": ">=11.6 <12"
+    "npm": ">=10 <12"
   },
   "scripts": {
     "dev": "vitepress dev",

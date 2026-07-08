@@ -31,7 +31,7 @@ erfüllt ist.
 ## Voraussetzungen
 
 - Java 21+ und Maven (oder Build über die IDE)
-- Node `>=22` und npm `>=11.6 <12`
+- Node `>=22` und npm `>=10 <12`
 - Ein erreichbares **dave-backend** (lokal am einfachsten via `runLocalNoSecurity`) – **nur** für
   die Zählstellensuche und das Einspielen. Für Konfiguration, Verkehrsbeziehungen und
   CSV-Erzeugung wird kein dave-backend benötigt.
