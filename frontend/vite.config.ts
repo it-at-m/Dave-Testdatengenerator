@@ -64,7 +64,7 @@ export default defineConfig(({ mode }) => {
         // Frontend calls go to "/api/backend/..."; strip that prefix and forward to the
         // dave-testdata-generator backend (default local port 8087).
         "/api/backend": {
-          target: "http://localhost:8087",
+          target: 'http://127.0.0.1:8087',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api\/backend/, ""),
         },
