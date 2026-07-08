@@ -21,8 +21,6 @@ jobs:
         include: # Add or modify paths according to your project structure
           - app-path: backend
           - app-path: frontend
-          - app-path: eai
-          - app-path: webcomponent
 
     steps:
       - uses: it-at-m/lhm_actions/action-templates/actions/action-checkout@877aafa9f0732cbc91819b60d237c351ea88f95c # v1.0.34
