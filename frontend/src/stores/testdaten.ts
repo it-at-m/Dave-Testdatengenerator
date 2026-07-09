@@ -129,7 +129,7 @@ export const useTestdatenStore = defineStore("testdaten", () => {
     () => config.value.zaehlart,
     (zaehlart, vorher) => {
       config.value.kategorien = defaultKategorienFor(zaehlart);
-      if (zaehlart === "QU" || vorher === "QU") {
+      if (zaehlart === "QJS" || vorher === "QJS") {
         config.value.knotenarme = defaultKnotenarmeFor(zaehlart);
       }
     }
