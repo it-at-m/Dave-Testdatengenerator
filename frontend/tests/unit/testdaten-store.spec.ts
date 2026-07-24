@@ -123,4 +123,11 @@ describe("testdaten store – Vorbelegung", () => {
       "FUSS",
     ]);
   });
+
+  test("Zählart R belegt nur Rad vor", async () => {
+    const store = useTestdatenStore();
+    store.config.zaehlart = "R";
+    await nextTick();
+    expect(store.config.kategorien).toEqual(["RAD"]);
+  });
 });
