@@ -7,8 +7,10 @@ spring:
     version: "@project.version@"
   profiles:
     # Activating the "local" profile also activates "no-security" (inbound auth disabled for local dev).
+    # In OpenShift (Profil "dev") starten wir initial ebenfalls ohne eingehende Security.
     group:
       local: no-security
+      dev: no-security
   web:
     error:
       whitelabel:
@@ -91,3 +93,16 @@ info:
     description: "@project.description@"
   build:
     java.version: "@java.version@"
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+# Provide required refarch.security properties for the "dev" profile (used in OpenShift)
+# to avoid startup failures while inbound security is disabled via the profile group above.
+refarch:
+  security:
+    client-id: ${REFARCH_SECURITY_CLIENT_ID:openshift}
