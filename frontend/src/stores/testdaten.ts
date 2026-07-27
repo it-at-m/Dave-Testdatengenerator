@@ -27,12 +27,16 @@ import { useSnackbarStore } from "@/stores/snackbar";
 
 /**
  * Zählarten, bei denen ausschließlich Fuß- und Radverkehr je Straßenseite bzw. Querung erfasst wird.
- * Hier werden standardmäßig nur Rad und Fuß vorbelegt; sonst alle Fahrzeugklassen außer Fuß.
+ * Hier werden standardmäßig nur Rad und Fuß vorbelegt. Für die reine Radzählung ("R") wird nur
+ * "RAD" vorbelegt. Sonst alle Fahrzeugklassen.
  * (Vgl. examples/testdata im dave-Repository.)
  */
 const FUSS_RAD_ZAEHLARTEN = ["QU", "FJS", "QJS"];
 
 function defaultKategorienFor(zaehlart: string): string[] {
+  if (zaehlart === "R") {
+    return ["RAD"];
+  }
   return FUSS_RAD_ZAEHLARTEN.includes(zaehlart)
     ? ["RAD", "FUSS"]
     : ["PKW", "LKW", "LZ", "BUS", "KRAD", "RAD", "FUSS"];
@@ -121,7 +125,7 @@ export const useTestdatenStore = defineStore("testdaten", () => {
   );
 
   // Bei Wechsel der Zählart die Fahrzeugtypen passend vorbelegen:
-  // Fuß/Rad-Zählarten (QU, FJS, QJS) -> nur Rad + Fuß, sonst alle außer Fuß.
+  // R -> nur Rad; Fuß/Rad-Zählarten (QU, FJS, QJS) -> Rad + Fuß; sonst alle.
   // Zusätzlich für QU zwei gegenüberliegende Knotenarme vorbelegen (z.B. 2 und 4).
   // Knotenarme nur beim Wechsel von/zu QU neu setzen, damit selbst eingegebene
   // Straßennamen beim Wechsel zwischen anderen Zählarten erhalten bleiben.
@@ -129,7 +133,7 @@ export const useTestdatenStore = defineStore("testdaten", () => {
     () => config.value.zaehlart,
     (zaehlart, vorher) => {
       config.value.kategorien = defaultKategorienFor(zaehlart);
-      if (zaehlart === "QU" || vorher === "QU") {
+      if (zaehlart === "QJS" || vorher === "QJS") {
         config.value.knotenarme = defaultKnotenarmeFor(zaehlart);
       }
     }

@@ -15,7 +15,7 @@ describe("testdaten store – Vorbelegung", () => {
     expect(store.config.knotenarme[0].nummer).toBe(1);
   });
 
-  test("Normalzählung belegt alle Fahrzeugklassen außer Fuß vor", () => {
+  test("Normalzählung belegt alle Fahrzeugklassen vor", () => {
     const store = useTestdatenStore();
     expect(store.config.kategorien).toEqual([
       "PKW",
@@ -24,6 +24,7 @@ describe("testdaten store – Vorbelegung", () => {
       "BUS",
       "KRAD",
       "RAD",
+      "FUSS",
     ]);
   });
 
@@ -37,19 +38,19 @@ describe("testdaten store – Vorbelegung", () => {
     }
   );
 
-  test("QU belegt zwei gegenüberliegende Knotenarme vor", async () => {
+  test("QJS belegt zwei gegenüberliegende Knotenarme vor", async () => {
     const store = useTestdatenStore();
     expect(store.config.knotenarme).toHaveLength(1);
 
-    store.config.zaehlart = "QU";
+    store.config.zaehlart = "QJS";
     await nextTick();
 
     expect(store.config.knotenarme.map((a) => a.nummer)).toEqual([2, 4]);
   });
 
-  test("Wechsel von QU zurück stellt einen einzelnen Knotenarm wieder her", async () => {
+  test("Wechsel von QJS zurück stellt einen einzelnen Knotenarm wieder her", async () => {
     const store = useTestdatenStore();
-    store.config.zaehlart = "QU";
+    store.config.zaehlart = "QJS";
     await nextTick();
     expect(store.config.knotenarme).toHaveLength(2);
 
@@ -119,6 +120,14 @@ describe("testdaten store – Vorbelegung", () => {
       "BUS",
       "KRAD",
       "RAD",
+      "FUSS",
     ]);
+  });
+
+  test("Zählart R belegt nur Rad vor", async () => {
+    const store = useTestdatenStore();
+    store.config.zaehlart = "R";
+    await nextTick();
+    expect(store.config.kategorien).toEqual(["RAD"]);
   });
 });
