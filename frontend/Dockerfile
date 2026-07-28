@@ -7,5 +7,16 @@ COPY dist .
 # Copy custom nginx configurations
 COPY docker/nginx/*.conf "${NGINX_DEFAULT_CONF_PATH}"
 
+# Add startup wrapper
+USER 0
+USER 1001
+
+# Copy dynamic proxy template and startup script
+COPY docker/nginx/proxy_backend.conf.template /opt/app-root/src/nginx-templates/proxy_backend.conf.template
+COPY docker/run-nginx.sh /usr/local/bin/run-nginx.sh
+USER 0
+RUN chmod +x /usr/local/bin/run-nginx.sh && chown -R 1001:0 /opt/app-root/src
+USER 1001
+
 # Start the web server
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/usr/local/bin/run-nginx.sh"]

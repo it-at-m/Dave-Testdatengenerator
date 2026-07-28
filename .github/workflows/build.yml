@@ -6,6 +6,8 @@ on:
   push:
     branches:
       - "main"
+      - "only_csv"
+      - "test_deploy"
 
 jobs:
   build:
@@ -37,7 +39,7 @@ jobs:
         with:
           app-path: ${{ matrix.app-path }}
           java-version: "21"
-      - if: ${{ github.ref == 'refs/heads/main' && (steps.node.outcome == 'success' || steps.maven.outcome == 'success') }}
+      - if: ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test_deploy' || github.ref == 'refs/heads/only_csv') && (steps.node.outcome == 'success' || steps.maven.outcome == 'success') }}
         uses: it-at-m/lhm_actions/action-templates/actions/action-build-image@877aafa9f0732cbc91819b60d237c351ea88f95c # v1.0.34
         with:
           path: ${{ matrix.app-path }}
