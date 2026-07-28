@@ -7,9 +7,8 @@ COPY dist .
 # Copy custom nginx configurations
 COPY docker/nginx/*.conf "${NGINX_DEFAULT_CONF_PATH}"
 
-# Install envsubst for runtime templating and add startup wrapper
+# Add startup wrapper
 USER 0
-RUN microdnf -y install gettext && microdnf -y clean all
 USER 1001
 
 # Copy dynamic proxy template and startup script
