@@ -85,15 +85,15 @@
                 clearable
               />
             </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-text-field
-                v-model="store.config.kreuzungsname"
-                :label="t('views.testdaten.zaehlstelle.name')"
-              />
-            </v-col>
+<!--            <v-col-->
+<!--              cols="12"-->
+<!--              md="6"-->
+<!--            >-->
+<!--              <v-text-field-->
+<!--                v-model="store.config.kreuzungsname"-->
+<!--                :label="t('views.testdaten.zaehlstelle.name')"-->
+<!--              />-->
+<!--            </v-col>-->
           </v-row>
 
 <!--          <v-expansion-panels class="mt-2">-->
